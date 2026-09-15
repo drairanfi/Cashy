@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-zinc-950 text-zinc-100 antialiased;
+  }
+}
+
+@layer components {
+  /* ── Button ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn--primary { @apply bg-violet-500 text-white hover:bg-violet-600; }
+  .btn--ghost { @apply text-violet-400 hover:bg-zinc-800; }
+  .btn--outline { @apply border border-zinc-700 text-zinc-200 hover:bg-zinc-800; }
+  .btn--danger { @apply text-rose-400 hover:bg-rose-500/10; }
+
+  /* ── Input ── */
+  .input {
+    @apply w-full rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-zinc-500 outline-none transition-colors focus:border-violet-500;
+  }
+  .input--error { @apply border-rose-500; }
+
+  /* ── Badge ── */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+  .badge--danger { @apply bg-rose-500/15 text-rose-400; }
+  .badge--warning { @apply bg-amber-500/15 text-amber-400; }
+  .badge--success { @apply bg-emerald-500/15 text-emerald-400; }
+  .badge--neutral { @apply bg-zinc-800 text-zinc-300; }
+
+  /* ── ColorIndicator ── */
+  .color-indicator {
+    @apply inline-block h-2.5 w-2.5 rounded-full;
+  }
+  .color-indicator--danger { @apply bg-rose-500; }
+  .color-indicator--warning { @apply bg-amber-400; }
+  .color-indicator--success { @apply bg-emerald-500; }
+
+  /* ── ProgressBar ── */
+  .progress-bar {
+    @apply h-2 w-full overflow-hidden rounded-full bg-zinc-800;
+  }
+  .progress-bar__fill {
+    @apply h-full rounded-full bg-violet-500 transition-all duration-300;
+  }
+
+  /* ── SaldoStateIndicator ── */
+  .saldo-state-indicator {
+    @apply inline-flex items-center gap-2 rounded-full bg-black/20 px-3 py-1 text-xs font-medium text-white;
+  }
+  .saldo-state-indicator__dot {
+    @apply h-2 w-2 rounded-full;
+  }
+  .saldo-state-indicator--danger .saldo-state-indicator__dot { @apply bg-rose-400; }
+  .saldo-state-indicator--warning .saldo-state-indicator__dot { @apply bg-amber-300; }
+  .saldo-state-indicator--success .saldo-state-indicator__dot { @apply bg-emerald-300; }
+
+  /* ── SaldoCard (DashboardHeader) ── */
+  .saldo-card {
+    @apply relative overflow-hidden rounded-3xl p-6 text-white transition-colors duration-500 ease-in-out lg:p-8;
+  }
+  .saldo-card--danger { @apply bg-gradient-to-br from-rose-500 via-rose-600 to-rose-900; }
+  .saldo-card--warning { @apply bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700; }
+  .saldo-card--success { @apply bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-800; }
+  .saldo-card__label { @apply text-sm text-white/70; }
+  .saldo-card__monto { @apply mt-2 text-4xl font-bold lg:text-5xl; }
+  .saldo-card__footer { @apply mt-4 flex items-center justify-between; }
+  .saldo-card__pct { @apply text-sm text-white/70; }
+
+  /* ── StatCard ── */
+  .stat-card {
+    @apply flex flex-col gap-2 rounded-2xl bg-zinc-800/60 p-4;
+  }
+  .stat-card__icon {
+    @apply flex h-10 w-10 items-center justify-center rounded-full;
+  }
+  .stat-card__label { @apply text-xs text-zinc-400; }
+  .stat-card__monto { @apply text-lg font-semibold text-white; }
+
+  /* ── IconButton / Avatar ── */
+  .icon-button {
+    @apply flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/60 text-zinc-300 transition-colors hover:bg-zinc-700;
+  }
+  .avatar {
+    @apply flex h-10 w-10 items-center justify-center rounded-full bg-violet-500 font-semibold text-white;
+  }
+
+  /* ── ServicioCard ── */
+  .servicio-card {
+    @apply flex items-center justify-between rounded-2xl bg-zinc-800/60 p-4;
+  }
+  .servicio-card__titulo { @apply text-sm font-medium text-zinc-100; }
+  .servicio-card__monto { @apply mt-1 text-lg font-semibold text-white; }
+  .servicio-card__action {
+    @apply rounded-lg px-3 py-1.5 text-sm text-violet-400 hover:bg-zinc-800;
+  }
+
+  /* ── MetaCard ── */
+  .meta-card {
+    @apply rounded-2xl bg-zinc-800/60 p-4;
+  }
+  .meta-card__header { @apply flex items-center justify-between; }
+  .meta-card__titulo { @apply text-sm font-medium text-zinc-100; }
+  .meta-card__action {
+    @apply rounded-lg px-3 py-1.5 text-sm text-violet-400 hover:bg-zinc-800;
+  }
+  .meta-card__objetivo { @apply mt-3 text-2xl font-bold text-white; }
+  .meta-card__mensual { @apply mt-1 text-sm text-zinc-400; }
+  .meta-card__meses { @apply mt-2 text-xs font-medium text-emerald-400; }
+
+  /* ── FormField ── */
+  .form-field { @apply flex flex-col gap-1.5; }
+  .form-field__label { @apply text-sm font-medium text-zinc-300; }
+  .form-field__error { @apply text-xs text-rose-400; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4;
+  }
+  .modal {
+    @apply w-full max-w-md rounded-3xl bg-zinc-900 p-6;
+  }
+  .modal__body { @apply mt-4 flex flex-col gap-4; }
+  .modal-header { @apply flex items-center justify-between; }
+  .modal-header__title { @apply text-lg font-semibold text-white; }
+  .modal-header__close {
+    @apply flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800 hover:text-white;
+  }
+
+  /* ── ConfirmDialog ── */
+  .confirm-dialog__message {
+    @apply mt-2 text-sm text-zinc-400;
+  }
+  .confirm-dialog__actions {
+    @apply mt-6 flex justify-end gap-2;
+  }
+
+  /* ── Section ── */
+  .section { @apply flex flex-col gap-3; }
+  .section__header { @apply flex items-center justify-between; }
+  .section__title { @apply text-lg font-semibold text-white; }
+  .section__list { @apply flex flex-col gap-3; }
+  .section__empty { @apply text-sm text-zinc-500; }
+
+  /* ── DashboardLayout ── */
+  .dashboard-shell { @apply min-h-screen w-full; }
+
+  .dashboard-sidebar {
+    @apply hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:flex lg:w-64 lg:flex-col lg:gap-1 lg:border-r lg:border-zinc-800 lg:bg-zinc-900/60 lg:px-4 lg:py-6 lg:backdrop-blur;
+  }
+  .sidebar-brand { @apply mb-6 px-3 text-xl font-bold tracking-tight text-white; }
+  .sidebar-nav { @apply flex flex-col gap-1; }
+  .sidebar-nav__item {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white;
+  }
+  .sidebar-nav__item--active { @apply bg-violet-500/15 text-violet-400; }
+
+  .dashboard-main { @apply w-full lg:pl-64; }
+  .dashboard-layout {
+    @apply mx-auto flex w-full max-w-md flex-col px-4 pb-28 pt-6 lg:max-w-3xl lg:px-8 lg:pb-12 lg:pt-10;
+  }
+  .dashboard-content { @apply flex flex-col gap-6; }
+
+  .bottom-nav {
+    @apply fixed bottom-0 left-1/2 z-40 flex w-full max-w-md -translate-x-1/2 items-center justify-around rounded-t-3xl border-t border-zinc-800 bg-zinc-900/95 px-2 py-2 backdrop-blur lg:hidden;
+  }
+  .bottom-nav__item {
+    @apply flex flex-col items-center gap-1 rounded-xl px-3 py-2 text-zinc-500 transition-colors;
+  }
+  .bottom-nav__item--active { @apply text-violet-400; }
+  .bottom-nav__label { @apply text-[10px] font-medium; }
+
+  /* ── EmptyState ── */
+  .empty-state {
+    @apply flex flex-col items-start gap-3 rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/60 p-5;
+  }
+  .empty-state__title { @apply text-sm font-medium text-white; }
+  .empty-state__text { @apply text-sm text-zinc-400; }
+
+  /* ── PageHeader ── */
+  .page-header { @apply flex items-center justify-between gap-4; }
+  .page-header__title { @apply text-2xl font-bold text-white; }
+  .page-header__subtitle { @apply mt-1 text-sm text-zinc-400; }
+
+  /* ── ItemCard (secciones mockeadas) ── */
+  .item-card {
+    @apply flex items-center justify-between gap-3 rounded-2xl bg-zinc-800/60 p-4;
+  }
+  .item-card__info { @apply flex min-w-0 flex-col gap-1; }
+  .item-card__titulo { @apply truncate text-sm font-medium text-zinc-100; }
+  .item-card__meta { @apply flex items-center gap-2 text-xs text-zinc-400; }
+  .item-card__monto { @apply text-lg font-semibold text-white; }
+  .item-card__actions { @apply flex items-center gap-1; }
+  .item-card__delete {
+    @apply flex h-9 w-9 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-rose-500/10 hover:text-rose-400;
+  }
+  .item-card__edit {
+    @apply flex h-9 w-9 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-white;
+  }
+
+  /* ── AhorroCard ── */
+  .ahorro-card { @apply flex flex-col gap-3 rounded-2xl bg-zinc-800/60 p-4; }
+  .ahorro-card__header { @apply flex items-center justify-between; }
+  .ahorro-card__nombre { @apply text-sm font-medium text-zinc-100; }
+  .ahorro-card__montos { @apply flex items-end justify-between; }
+  .ahorro-card__actual { @apply text-lg font-semibold text-white; }
+  .ahorro-card__objetivo { @apply text-sm text-zinc-400; }
+  .ahorro-card__footer { @apply flex items-center justify-between; }
+  .ahorro-card__pct { @apply text-xs font-medium text-emerald-400; }
+
+  /* ── AporteModal ── */
+  .aporte-actions { @apply flex justify-end gap-2; }
+
+  /* ── AuthLayout ── */
+  .auth-layout {
+    @apply flex min-h-screen items-center justify-center px-4;
+  }
+  .auth-layout__card {
+    @apply w-full max-w-sm rounded-3xl bg-zinc-900 p-8 lg:max-w-md lg:p-10;
+  }
+  .auth-layout__title { @apply text-2xl font-bold text-white; }
+  .auth-layout__subtitle { @apply mt-1 text-sm text-zinc-400; }
+  .auth-form { @apply mt-6 flex flex-col gap-4; }
+  .auth-form__footer { @apply mt-6 text-center text-sm text-zinc-400; }
+}
