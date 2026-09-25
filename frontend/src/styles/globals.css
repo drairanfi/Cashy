@@ -69,6 +69,7 @@
   .saldo-card--success { @apply bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-800; }
   .saldo-card__label { @apply text-sm text-white/70; }
   .saldo-card__monto { @apply mt-2 text-4xl font-bold lg:text-5xl; }
+  .saldo-card__moneda { @apply mt-1 text-xs uppercase tracking-wide text-white/60; }
   .saldo-card__footer { @apply mt-4 flex items-center justify-between; }
   .saldo-card__pct { @apply text-sm text-white/70; }
 
@@ -84,7 +85,10 @@
 
   /* ── IconButton / Avatar ── */
   .icon-button {
-    @apply flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/60 text-zinc-300 transition-colors hover:bg-zinc-700;
+    @apply relative flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/60 text-zinc-300 transition-colors hover:bg-zinc-700;
+  }
+  .icon-button__dot {
+    @apply absolute right-2 top-2 h-2.5 w-2.5 rounded-full border-2 border-zinc-950 bg-rose-500;
   }
   .avatar {
     @apply flex h-10 w-10 items-center justify-center rounded-full bg-violet-500 font-semibold text-white;
@@ -104,8 +108,15 @@
   .meta-card {
     @apply rounded-2xl bg-zinc-800/60 p-4;
   }
+  .meta-card--prioritaria {
+    @apply border border-violet-500/50 bg-violet-500/10;
+  }
   .meta-card__header { @apply flex items-center justify-between; }
-  .meta-card__titulo { @apply text-sm font-medium text-zinc-100; }
+  .meta-card__titulo-wrap { @apply flex min-w-0 items-center gap-2; }
+  .meta-card__titulo { @apply truncate text-sm font-medium text-zinc-100; }
+  .meta-card__badge {
+    @apply shrink-0 rounded-full bg-violet-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-violet-300;
+  }
   .meta-card__action {
     @apply rounded-lg px-3 py-1.5 text-sm text-violet-400 hover:bg-zinc-800;
   }
@@ -118,14 +129,23 @@
   .form-field__label { @apply text-sm font-medium text-zinc-300; }
   .form-field__error { @apply text-xs text-rose-400; }
 
+  /* ── Meta prioritaria ── */
+  .meta-priority {
+    @apply flex cursor-pointer items-start gap-3 rounded-2xl border border-zinc-700 bg-zinc-800/60 p-3;
+  }
+  .meta-priority__input { @apply mt-0.5 h-4 w-4 shrink-0 accent-violet-500; }
+  .meta-priority__title { @apply block text-sm font-medium text-zinc-100; }
+  .meta-priority__hint { @apply mt-0.5 block text-xs text-zinc-400; }
+
   /* ── Modal ── */
   .modal-overlay {
     @apply fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4;
   }
   .modal {
-    @apply w-full max-w-md rounded-3xl bg-zinc-900 p-6;
+    @apply flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-zinc-900 p-6;
   }
-  .modal__body { @apply mt-4 flex flex-col gap-4; }
+  .modal--wide { @apply max-w-lg; }
+  .modal__body { @apply mt-4 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto; }
   .modal-header { @apply flex items-center justify-between; }
   .modal-header__title { @apply text-lg font-semibold text-white; }
   .modal-header__close {
@@ -227,4 +247,59 @@
   .auth-layout__subtitle { @apply mt-1 text-sm text-zinc-400; }
   .auth-form { @apply mt-6 flex flex-col gap-4; }
   .auth-form__footer { @apply mt-6 text-center text-sm text-zinc-400; }
+
+  /* ── InsightPanel (IA) ── */
+  .insight-list { @apply flex flex-col gap-3; }
+  .insight-card { @apply rounded-2xl border border-zinc-800 bg-zinc-800/60 p-4; }
+  .insight-card--alerta { @apply border-rose-500/30; }
+  .insight-card--sugerencia { @apply border-amber-500/30; }
+  .insight-card--info { @apply border-zinc-700; }
+  .insight-card__header { @apply flex items-center; }
+  .insight-card__titulo { @apply mt-2 text-sm font-semibold text-white; }
+  .insight-card__mensaje { @apply mt-1 text-sm text-zinc-300; }
+  .insight-panel__actions { @apply flex justify-end; }
+
+  /* ── ChatAssistant (IA) ── */
+  .chat-fab {
+    @apply fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-violet-500 text-white shadow-lg shadow-violet-500/30 transition-transform hover:scale-105 lg:bottom-6 lg:right-6;
+  }
+  .chat-panel {
+    @apply fixed bottom-24 right-4 z-50 flex h-[70vh] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl lg:bottom-24 lg:right-6 lg:h-[32rem];
+  }
+  .chat-panel__header {
+    @apply flex items-center justify-between border-b border-zinc-800 px-4 py-3;
+  }
+  .chat-panel__title { @apply text-sm font-semibold text-white; }
+  .chat-panel__subtitle { @apply text-xs text-zinc-500; }
+  .chat-panel__close {
+    @apply flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-800 hover:text-white;
+  }
+  .chat-panel__messages { @apply flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4; }
+  .chat-panel__empty { @apply m-auto max-w-[16rem] text-center text-sm text-zinc-500; }
+  .chat-panel__status { @apply text-xs text-rose-400; }
+  .chat-msg { @apply max-w-[85%] rounded-2xl px-3 py-2 text-sm; }
+  .chat-msg--user { @apply self-end bg-violet-500 text-white; }
+  .chat-msg--assistant { @apply self-start bg-zinc-800 text-zinc-100; }
+  .chat-msg__body { @apply whitespace-pre-wrap break-words; }
+  .chat-msg__speak {
+    @apply mt-1 flex items-center gap-1 text-xs text-zinc-400 hover:text-white;
+  }
+  .chat-actions {
+    @apply flex max-w-[95%] flex-col gap-2 self-start rounded-2xl bg-zinc-800 p-3;
+  }
+  .chat-actions__title { @apply text-xs font-medium text-zinc-400; }
+  .chat-actions__list { @apply flex flex-col gap-1.5; }
+  .chat-actions__item { @apply flex items-start gap-2 text-sm text-zinc-100; }
+  .chat-actions__bullet { @apply mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400; }
+  .chat-actions__buttons { @apply mt-1 flex justify-end gap-2; }
+  .chat-actions__status { @apply text-xs text-zinc-400; }
+  .chat-panel__form { @apply flex items-end gap-2 border-t border-zinc-800 p-3; }
+  .chat-panel__input { @apply max-h-24 flex-1 resize-none; }
+  .chat-panel__mic {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white;
+  }
+  .chat-panel__mic--active { @apply bg-rose-500/20 text-rose-400; }
+  .chat-panel__send {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-500 text-white transition-colors hover:bg-violet-600 disabled:cursor-not-allowed disabled:opacity-50;
+  }
 }

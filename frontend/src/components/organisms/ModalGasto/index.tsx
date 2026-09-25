@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { gastoFormSchema, simpleGastoFormSchema } from '../../../schemas/mock';
+import { gastoFormSchema, simpleGastoFormSchema } from '../../../schemas/movimientos';
 import { GASTO_CATEGORIAS, type GastoCategoria } from '../../../types';
 import { ModalHeader } from '../../molecules/ModalHeader';
 import { FormField } from '../../molecules/FormField';

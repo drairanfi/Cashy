@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
+import { ChatAssistant } from '../../organisms/ChatAssistant';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -57,6 +58,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </NavLink>
         ))}
       </nav>
+
+      <ChatAssistant />
     </div>
   );
 }

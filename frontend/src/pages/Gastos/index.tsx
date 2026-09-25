@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMockDataStore } from '../../store/mockDataStore';
+import { useCreateGasto, useDeleteGasto, useGastos } from '../../hooks/useGastos';
 import type { Gasto, GastoCategoria } from '../../types';
 import { formatCurrency } from '../../utils/format';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
@@ -18,9 +18,9 @@ const CATEGORY_TONE: Record<GastoCategoria, 'neutral' | 'warning' | 'success' | 
 };
 
 export function Gastos() {
-  const gastos = useMockDataStore((s) => s.gastos);
-  const addGasto = useMockDataStore((s) => s.addGasto);
-  const removeGasto = useMockDataStore((s) => s.removeGasto);
+  const { data: gastos = [] } = useGastos();
+  const createGasto = useCreateGasto();
+  const deleteGasto = useDeleteGasto();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState<Gasto | null>(null);
@@ -56,7 +56,11 @@ export function Gastos() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSave={(data) =>
-          addGasto({ descripcion: data.descripcion, monto: data.monto, categoria: data.categoria! })
+          createGasto.mutate({
+            descripcion: data.descripcion,
+            monto: data.monto,
+            categoria: data.categoria!,
+          })
         }
         title="Agregar gasto"
         conCategoria
@@ -68,7 +72,7 @@ export function Gastos() {
         title="Eliminar gasto"
         message={`¿Eliminar "${toDelete?.descripcion}"?`}
         onConfirm={() => {
-          if (toDelete) removeGasto(toDelete.id);
+          if (toDelete) deleteGasto.mutate(toDelete.id);
           setToDelete(null);
         }}
         onCancel={() => setToDelete(null)}

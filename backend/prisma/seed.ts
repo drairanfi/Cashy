@@ -14,16 +14,10 @@ async function main() {
       email: 'demo@cashy.app',
       password,
       nombre: 'Usuario Demo',
-      sueldo: {
-        create: { monto: 500000 },
-      },
-      servicios: {
-        create: [{ nombre: 'Alquiler', montoDestinado: 150000 }],
-      },
     },
   });
 
-  console.log('Seed OK: demo@cashy.app / demo1234');
+  console.log('Seed OK: demo@cashy.app / demo1234 (sin datos precargados)');
 }
 
 main()

@@ -8,9 +8,12 @@ interface MetaCardProps {
 
 export function MetaCard({ meta, onEdit }: MetaCardProps) {
   return (
-    <div className="meta-card">
+    <div className={`meta-card ${meta.prioritaria ? 'meta-card--prioritaria' : ''}`}>
       <div className="meta-card__header">
-        <p className="meta-card__titulo">{meta.nombre}</p>
+        <div className="meta-card__titulo-wrap">
+          <p className="meta-card__titulo">{meta.nombre}</p>
+          {meta.prioritaria && <span className="meta-card__badge">Meta grande</span>}
+        </div>
         <button type="button" className="meta-card__action" onClick={() => onEdit(meta)}>
           Editar
         </button>

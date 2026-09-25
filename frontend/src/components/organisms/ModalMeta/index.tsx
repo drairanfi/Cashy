@@ -38,8 +38,9 @@ export function ModalMeta({ open, onClose, meta }: ModalMetaProps) {
               nombre: meta.nombre,
               montoObjetivo: meta.montoObjetivo,
               montoMensual: meta.montoMensual,
+              prioritaria: meta.prioritaria,
             }
-          : {},
+          : { prioritaria: false },
       );
     }
   }, [open, meta, reset]);
@@ -100,6 +101,15 @@ export function ModalMeta({ open, onClose, meta }: ModalMetaProps) {
                 placeholder="0"
               />
             </FormField>
+            <label className="meta-priority">
+              <input type="checkbox" className="meta-priority__input" {...register('prioritaria')} />
+              <span>
+                <span className="meta-priority__title">Esta es mi meta grande</span>
+                <span className="meta-priority__hint">
+                  Casa, auto, moto, viaje importante... Cashy le dará prioridad en sus consejos.
+                </span>
+              </span>
+            </label>
             {error && <p className="form-field__error">{(error as Error).message}</p>}
             <Button type="submit" disabled={isPending}>
               {isPending ? 'Guardando...' : 'Guardar'}

@@ -11,7 +11,7 @@ Personal finance app for tracking salary, services, savings goals and expenses.
 .
 ├── backend/                # Express API (layered: routes → controllers → services → repositories)
 │   ├── prisma/
-│   │   ├── schema.prisma   # Usuario, Sueldo, Servicio, Meta
+│   │   ├── schema.prisma   # Usuario, Sueldo, Servicio, Meta, Gasto, Comida, Gimnasio, Ahorro
 │   │   └── seed.ts         # Demo user + sample data
 │   └── src/
 │       ├── controllers/
@@ -31,7 +31,7 @@ Personal finance app for tracking salary, services, savings goals and expenses.
         ├── pages/          # Login, Registro, Dashboard, Gastos, Comida, Gimnasio, Ahorros, Mas
         ├── hooks/          # React Query hooks per domain
         ├── services/api/   # fetch client + domain API modules
-        ├── store/          # Zustand: user session + mock data
+        ├── store/          # Zustand: user session
         └── styles/         # Tailwind entry + component classes (BEM)
 ```
 
@@ -143,10 +143,37 @@ Base URL: `http://localhost:4000/api`. Protected routes require `Authorization: 
 | `POST`   | `/metas`            | ✓    | Create goal                    |
 | `PATCH`  | `/metas/:id`        | ✓    | Update goal                    |
 | `DELETE` | `/metas/:id`        | ✓    | Delete goal                    |
+| `GET`    | `/gastos`           | ✓    | List variable expenses         |
+| `POST`   | `/gastos`           | ✓    | Create variable expense        |
+| `DELETE` | `/gastos/:id`       | ✓    | Delete variable expense        |
+| `GET`    | `/comidas`          | ✓    | List food expenses             |
+| `POST`   | `/comidas`          | ✓    | Create food expense            |
+| `DELETE` | `/comidas/:id`      | ✓    | Delete food expense            |
+| `GET`    | `/gimnasio`         | ✓    | List gym expenses              |
+| `POST`   | `/gimnasio`         | ✓    | Create gym expense             |
+| `DELETE` | `/gimnasio/:id`     | ✓    | Delete gym expense             |
+| `GET`    | `/ahorros`          | ✓    | List savings                   |
+| `POST`   | `/ahorros`          | ✓    | Create savings goal            |
+| `POST`   | `/ahorros/:id/aportes` | ✓ | Add contribution to savings    |
+| `DELETE` | `/ahorros/:id`      | ✓    | Delete savings goal            |
+| `GET`    | `/ai/status`        | ✓    | Whether the AI assistant is enabled |
+| `GET`    | `/ai/insights`      | ✓    | AI financial notifications     |
+| `POST`   | `/ai/chat`          | ✓    | Chat with the Cashy assistant  |
+| `POST`   | `/ai/actions`       | ✓    | Execute AI-proposed actions (after user confirmation) |
 
-## Mock sections (MVP)
+## Persistence
 
-`Gastos`, `Comida`, `Gimnasio`, `Ahorros` and `Más` are functional pages with mocked data stored in memory (Zustand). They reset to the initial seed on reload and are not yet connected to the backend. `Inicio` (Dashboard) reads real data from the API.
+All sections are backed by the API and PostgreSQL: salary, services, savings goals, variable expenses, food, gym and savings. Nothing is hardcoded: a new account starts empty and every change is persisted. The `Gastos`, `Comida`, `Gimnasio` and `Ahorros` pages use the same layered backend as the rest of the app.
+
+## AI assistant
+
+Optional feature powered by OpenCode Go/Zen (`OPENCODE_*` env vars in `backend/.env`). It provides:
+
+- **Insights** (`GET /api/ai/insights`): AI-generated financial notifications, cached in memory for 1 hour.
+- **Chat** (`POST /api/ai/chat`): ask things like "¿Cómo van mis gastos del mes?" in text or with the browser's speech dictation (Web Speech API), with optional text-to-speech playback.
+- **Actions** (`POST /api/ai/actions`): the assistant can propose changes (add/delete gastos, comida, gimnasio, ahorros; contribute to a savings goal). It never writes on its own: the UI shows a confirmation card and the backend executes only after the user confirms.
+
+If `OPENCODE_API_KEY` is not set, the AI endpoints degrade gracefully (the chat button is hidden and insights return empty).
 
 ## Switching to Supabase
 

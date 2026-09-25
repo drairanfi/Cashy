@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMockDataStore } from '../../store/mockDataStore';
+import { useComidas, useCreateComida, useDeleteComida } from '../../hooks/useComidas';
 import type { Comida } from '../../types';
 import { formatCurrency } from '../../utils/format';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
@@ -10,9 +10,9 @@ import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
 import { ModalGasto } from '../../components/organisms/ModalGasto';
 
 export function Comida() {
-  const comidas = useMockDataStore((s) => s.comidas);
-  const addComida = useMockDataStore((s) => s.addComida);
-  const removeComida = useMockDataStore((s) => s.removeComida);
+  const { data: comidas = [] } = useComidas();
+  const createComida = useCreateComida();
+  const deleteComida = useDeleteComida();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState<Comida | null>(null);
@@ -47,7 +47,7 @@ export function Comida() {
       <ModalGasto
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        onSave={(data) => addComida({ descripcion: data.descripcion, monto: data.monto })}
+        onSave={(data) => createComida.mutate({ descripcion: data.descripcion, monto: data.monto })}
         title="Agregar comida"
         labelDescripcion="Comida"
         submitLabel="Guardar comida"
@@ -58,7 +58,7 @@ export function Comida() {
         title="Eliminar comida"
         message={`¿Eliminar "${toDelete?.descripcion}"?`}
         onConfirm={() => {
-          if (toDelete) removeComida(toDelete.id);
+          if (toDelete) deleteComida.mutate(toDelete.id);
           setToDelete(null);
         }}
         onCancel={() => setToDelete(null)}

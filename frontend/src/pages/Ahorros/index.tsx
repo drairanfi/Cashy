@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { useMockDataStore } from '../../store/mockDataStore';
+import {
+  useAhorros,
+  useAportarAhorro,
+  useCreateAhorro,
+  useDeleteAhorro,
+} from '../../hooks/useAhorros';
 import type { Ahorro } from '../../types';
 import { formatCurrency } from '../../utils/format';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
@@ -10,10 +15,10 @@ import { ModalAhorro } from '../../components/organisms/ModalAhorro';
 import { ModalAporte } from '../../components/organisms/ModalAporte';
 
 export function Ahorros() {
-  const ahorros = useMockDataStore((s) => s.ahorros);
-  const addAhorro = useMockDataStore((s) => s.addAhorro);
-  const removeAhorro = useMockDataStore((s) => s.removeAhorro);
-  const aportarAhorro = useMockDataStore((s) => s.aportarAhorro);
+  const { data: ahorros = [] } = useAhorros();
+  const createAhorro = useCreateAhorro();
+  const aportar = useAportarAhorro();
+  const deleteAhorro = useDeleteAhorro();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState<Ahorro | null>(null);
@@ -46,14 +51,14 @@ export function Ahorros() {
         )}
       </div>
 
-      <ModalAhorro open={modalOpen} onClose={() => setModalOpen(false)} onSave={addAhorro} />
+      <ModalAhorro open={modalOpen} onClose={() => setModalOpen(false)} onSave={(data) => createAhorro.mutate(data)} />
 
       <ModalAporte
         open={toAportar !== null}
         nombre={toAportar?.nombre ?? ''}
         onClose={() => setToAportar(null)}
         onSave={(monto) => {
-          if (toAportar) aportarAhorro(toAportar.id, monto);
+          if (toAportar) aportar.mutate({ id: toAportar.id, monto });
         }}
       />
 
@@ -62,7 +67,7 @@ export function Ahorros() {
         title="Eliminar meta"
         message={`¿Eliminar "${toDelete?.nombre}"?`}
         onConfirm={() => {
-          if (toDelete) removeAhorro(toDelete.id);
+          if (toDelete) deleteAhorro.mutate(toDelete.id);
           setToDelete(null);
         }}
         onCancel={() => setToDelete(null)}

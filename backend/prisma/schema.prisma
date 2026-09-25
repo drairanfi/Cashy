@@ -16,6 +16,10 @@ model Usuario {
   sueldo    Sueldo?
   servicios Servicio[]
   metas     Meta[]
+  gastos    Gasto[]
+  comidas   Comida[]
+  gimnasio  Gimnasio[]
+  ahorros   Ahorro[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -47,9 +51,63 @@ model Meta {
   nombre        String
   montoObjetivo Decimal  @db.Decimal(12, 2)
   montoMensual  Decimal  @db.Decimal(12, 2)
+  prioritaria   Boolean  @default(false)
   usuario       Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@index([usuarioId])
+}
+
+model Gasto {
+  id          String   @id @default(uuid())
+  usuarioId   String
+  descripcion String
+  monto       Decimal  @db.Decimal(12, 2)
+  categoria   String
+  fecha       DateTime @default(now())
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([usuarioId])
+}
+
+model Comida {
+  id          String   @id @default(uuid())
+  usuarioId   String
+  descripcion String
+  monto       Decimal  @db.Decimal(12, 2)
+  fecha       DateTime @default(now())
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([usuarioId])
+}
+
+model Gimnasio {
+  id        String   @id @default(uuid())
+  usuarioId String
+  actividad String
+  monto     Decimal  @db.Decimal(12, 2)
+  fecha     DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([usuarioId])
+}
+
+model Ahorro {
+  id        String   @id @default(uuid())
+  usuarioId String
+  nombre    String
+  objetivo  Decimal  @db.Decimal(12, 2)
+  actual    Decimal  @db.Decimal(12, 2) @default(0)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([usuarioId])
 }

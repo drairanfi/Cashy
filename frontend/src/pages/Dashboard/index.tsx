@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useDashboard } from '../../hooks/useDashboard';
 import { useServicios } from '../../hooks/useServicios';
 import { useMetas } from '../../hooks/useMetas';
+import { useInsights } from '../../hooks/useInsights';
 import { useUserStore } from '../../store/userStore';
 import type { Servicio, Meta } from '../../types';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { DashboardHeader } from '../../components/organisms/DashboardHeader';
+import { InsightPanel } from '../../components/organisms/InsightPanel';
 import { MetasSection } from '../../components/organisms/MetasSection';
 import { ServiciosSection } from '../../components/organisms/ServiciosSection';
 import { ModalServicio } from '../../components/organisms/ModalServicio';
@@ -18,7 +20,10 @@ export function Dashboard() {
   const { data: resumen, isLoading } = useDashboard();
   const { data: servicios = [] } = useServicios();
   const { data: metas = [] } = useMetas();
+  const { data: insightsData } = useInsights();
 
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notificationsSeen, setNotificationsSeen] = useState(false);
   const [servicioModalOpen, setServicioModalOpen] = useState(false);
   const [metaModalOpen, setMetaModalOpen] = useState(false);
   const [sueldoModalOpen, setSueldoModalOpen] = useState(false);
@@ -62,6 +67,11 @@ export function Dashboard() {
         ingresos={resumen.ingresos}
         gastos={resumen.gastos}
         ahorros={resumen.ahorros}
+        hasNotifications={!notificationsSeen && (insightsData?.insights.length ?? 0) > 0}
+        onOpenNotifications={() => {
+          setNotificationsSeen(true);
+          setNotificationsOpen(true);
+        }}
       />
 
       {resumen.sueldo === 0 ? (
@@ -95,6 +105,7 @@ export function Dashboard() {
         onClose={() => setSueldoModalOpen(false)}
         currentMonto={resumen.sueldo}
       />
+      <InsightPanel open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
     </DashboardLayout>
   );
 }

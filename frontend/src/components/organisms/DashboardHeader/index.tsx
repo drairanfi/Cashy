@@ -3,7 +3,6 @@ import { useSaldoState } from '../../../hooks/useSaldoState';
 import { SaldoStateIndicator } from '../../atoms/SaldoStateIndicator';
 import { SALDO_STATE_CLASSES, type SaldoUmbrales } from '../../../utils/saldo';
 import { formatCurrency } from '../../../utils/format';
-
 type StatTone = 'emerald' | 'rose' | 'sky';
 
 const STAT_TONES: Record<StatTone, string> = {
@@ -37,6 +36,8 @@ interface DashboardHeaderProps {
   gastos: number;
   ahorros: number;
   umbrales?: SaldoUmbrales;
+  hasNotifications?: boolean;
+  onOpenNotifications?: () => void;
 }
 
 export function DashboardHeader({
@@ -47,6 +48,8 @@ export function DashboardHeader({
   gastos,
   ahorros,
   umbrales,
+  hasNotifications,
+  onOpenNotifications,
 }: DashboardHeaderProps) {
   const { state, porcentaje } = useSaldoState(saldoDisponible, sueldo, umbrales);
 
@@ -58,7 +61,12 @@ export function DashboardHeader({
           <h1 className="text-2xl font-bold text-white">{nombre}</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button type="button" aria-label="Notificaciones" className="icon-button">
+          <button
+            type="button"
+            aria-label="Notificaciones"
+            className="icon-button"
+            onClick={onOpenNotifications}
+          >
             <svg
               width="20"
               height="20"
@@ -72,6 +80,7 @@ export function DashboardHeader({
               <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.7 21a2 2 0 0 1-3.4 0" />
             </svg>
+            {hasNotifications && <span className="icon-button__dot" />}
           </button>
           <span className="avatar">{nombre.charAt(0).toUpperCase()}</span>
         </div>
@@ -80,6 +89,7 @@ export function DashboardHeader({
       <div className={`saldo-card ${SALDO_STATE_CLASSES[state]}`}>
         <p className="saldo-card__label">Saldo disponible</p>
         <p className="saldo-card__monto">{formatCurrency(saldoDisponible)}</p>
+        <p className="saldo-card__moneda">Pesos colombianos (COP)</p>
         <div className="saldo-card__footer">
           <SaldoStateIndicator state={state} />
           <p className="saldo-card__pct">{Math.round(porcentaje)}% del sueldo</p>

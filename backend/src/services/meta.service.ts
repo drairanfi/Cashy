@@ -21,7 +21,7 @@ export async function listMetasUseCase(usuarioId: string) {
 
 export async function createMetaUseCase(
   usuarioId: string,
-  data: { nombre: string; montoObjetivo: number; montoMensual: number },
+  data: { nombre: string; montoObjetivo: number; montoMensual: number; prioritaria?: boolean },
 ) {
   const meta = await metaRepository.create(usuarioId, data);
   return toDTO(meta);
@@ -30,7 +30,12 @@ export async function createMetaUseCase(
 export async function updateMetaUseCase(
   usuarioId: string,
   id: string,
-  data: { nombre?: string; montoObjetivo?: number; montoMensual?: number },
+  data: {
+    nombre?: string;
+    montoObjetivo?: number;
+    montoMensual?: number;
+    prioritaria?: boolean;
+  },
 ) {
   const meta = await metaRepository.findById(id);
   if (!meta || meta.usuarioId !== usuarioId) {

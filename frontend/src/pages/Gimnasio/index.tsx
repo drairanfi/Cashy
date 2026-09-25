@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMockDataStore } from '../../store/mockDataStore';
+import { useGimnasio, useCreateGimnasio, useDeleteGimnasio } from '../../hooks/useGimnasio';
 import type { GimnasioRegistro } from '../../types';
 import { formatCurrency } from '../../utils/format';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
@@ -10,9 +10,9 @@ import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
 import { ModalGasto } from '../../components/organisms/ModalGasto';
 
 export function Gimnasio() {
-  const gimnasio = useMockDataStore((s) => s.gimnasio);
-  const addGimnasio = useMockDataStore((s) => s.addGimnasio);
-  const removeGimnasio = useMockDataStore((s) => s.removeGimnasio);
+  const { data: gimnasio = [] } = useGimnasio();
+  const createGimnasio = useCreateGimnasio();
+  const deleteGimnasio = useDeleteGimnasio();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState<GimnasioRegistro | null>(null);
@@ -47,7 +47,9 @@ export function Gimnasio() {
       <ModalGasto
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        onSave={(data) => addGimnasio({ actividad: data.descripcion, monto: data.monto })}
+        onSave={(data) =>
+          createGimnasio.mutate({ actividad: data.descripcion, monto: data.monto })
+        }
         title="Agregar actividad"
         labelDescripcion="Actividad"
         submitLabel="Guardar actividad"
@@ -58,7 +60,7 @@ export function Gimnasio() {
         title="Eliminar actividad"
         message={`¿Eliminar "${toDelete?.actividad}"?`}
         onConfirm={() => {
-          if (toDelete) removeGimnasio(toDelete.id);
+          if (toDelete) deleteGimnasio.mutate(toDelete.id);
           setToDelete(null);
         }}
         onCancel={() => setToDelete(null)}

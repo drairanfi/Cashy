@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ahorroFormSchema } from '../../../schemas/mock';
+import { ahorroFormSchema } from '../../../schemas/movimientos';
 import { ModalHeader } from '../../molecules/ModalHeader';
 import { FormField } from '../../molecules/FormField';
 import { Input } from '../../atoms/Input';

@@ -56,11 +56,11 @@ Auth is stateless JWT (access + refresh). `register` and `login` return `{ user,
 - `components/organisms/` — self-contained blocks: DashboardHeader, sections (Metas/Servicios), modals (ModalServicio, ModalMeta, ModalConfigurarSueldo, ModalGasto, ModalAhorro, ModalAporte).
 - `components/templates/` — AuthLayout, DashboardLayout (responsive shell: sidebar on `lg+`, bottom nav on mobile).
 - `pages/` — route components (Login, Registro, Dashboard, Gastos, Comida, Gimnasio, Ahorros, Mas).
-- `store/` — Zustand: `userStore` (session), `mockDataStore` (mock CRUD for the non-Dashboard sections).
+- `store/` — Zustand: `userStore` (session).
 - `hooks/` — React Query hooks per domain (`useDashboard`, `useServicios`, `useMetas`, `useSueldo`).
 - `services/api/` — `client.ts` (fetch wrapper with token refresh + `clearTokens`/`hasSession`) and per-domain modules.
 
-State split: **server state** (Dashboard, Sueldo, Servicios, Metas) → React Query; **client state / mock sections** (Gastos, Comida, Gimnasio, Ahorros, Más) → Zustand in memory.
+State split: **server state** (Dashboard, Sueldo, Servicios, Metas, Gastos, Comida, Gimnasio, Ahorros, AI) → React Query; **client state** (session) → Zustand.
 
 ## Conventions
 
@@ -79,8 +79,9 @@ State split: **server state** (Dashboard, Sueldo, Servicios, Metas) → React Qu
 - **Local DB**: Homebrew superuser role is the macOS username (no password). Current URLs: `postgresql://ESTUDIO@localhost:5432/cashy`. `createdb cashy` was already run.
 - **`.env`**: not committed. `DATABASE_URL` and `DIRECT_URL` are both required by `env.ts`. Backup of the original placeholder file: `backend/.env.local-backup`.
 - **Supabase migration path**: the app works against any Postgres. To go to Supabase, only change `DATABASE_URL`/`DIRECT_URL` and run `npx prisma migrate deploy`. Do NOT invent placeholder hosts — a URL with `<ref>`/`<password>` fails with P1013.
-- **Seed**: `npm run prisma:seed` creates `demo@cashy.app` / `demo1234` (with salary + a sample service). Idempotent (upsert).
-- **Mock sections**: Gastos/Comida/Gimnasio/Ahorros/Más hold data in memory (Zustand) — resets on reload. Dashboard (Inicio) hits the real API.
+- **Seed**: `npm run prisma:seed` creates `demo@cashy.app` / `demo1234` with no data (idempotent).
+- **All sections are API-backed**: Dashboard, Sueldo, Servicios, Metas, Gastos, Comida, Gimnasio and Ahorros read/write via the API and PostgreSQL. There is no in-memory mock data; new accounts start empty.
+- **AI assistant**: optional, configured with `OPENCODE_*` env vars. `services/ai.service.ts` calls the OpenCode Go endpoint with `fetch`; `services/ai-tools.ts` defines the function-calling tools. Chat can propose actions (add/delete movimientos, aportar ahorro) but never writes directly: the UI sends confirmed actions to `POST /api/ai/actions`. If `OPENCODE_API_KEY` is missing, endpoints degrade gracefully.
 - **Dev servers run in background** on this machine (started with `(npm run dev &)`). Check with `pgrep -fl "tsx watch|vite"`. Stop with `pkill -f "tsx watch"` / `pkill -f vite`. Killing the backend causes "Failed to fetch" in the UI.
 - **Frontend auth**: session is a token in `localStorage`; `hasSession()` gates routes. `Mas` page clears tokens + redirects to `/login`.
 - **API surface**: base `/api`; health check is `/health` (no prefix). See README.md for the endpoint table.
