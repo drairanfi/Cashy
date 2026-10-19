@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
 import { Registro } from './pages/Registro';
 import { Gastos } from './pages/Gastos';
+import { Categorias } from './pages/Categorias';
 import { Comida } from './pages/Comida';
 import { Gimnasio } from './pages/Gimnasio';
 import { Ahorros } from './pages/Ahorros';
@@ -37,6 +38,14 @@ export function App() {
             element={
               <RequireAuth>
                 <Gastos />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/categorias"
+            element={
+              <RequireAuth>
+                <Categorias />
               </RequireAuth>
             }
           />

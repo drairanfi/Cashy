@@ -1,6 +1,6 @@
-import type { Servicio } from '../../../types';
-import { ServicioCard } from '../../molecules/ServicioCard';
-import { Button } from '../../atoms/Button';
+import type { Servicio } from '@/types';
+import { ServicioCard } from '@/components/molecules/ServicioCard';
+import { Button } from '@/components/atoms/Button';
 
 interface ServiciosSectionProps {
   servicios: Servicio[];

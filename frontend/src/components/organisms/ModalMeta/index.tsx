@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createMetaSchema, type CreateMetaInput } from '../../../schemas/meta';
-import { useCreateMeta, useUpdateMeta, useDeleteMeta } from '../../../hooks/useMetas';
-import type { Meta } from '../../../types';
-import { ModalHeader } from '../../molecules/ModalHeader';
-import { ConfirmDialog } from '../../molecules/ConfirmDialog';
-import { FormField } from '../../molecules/FormField';
-import { Input } from '../../atoms/Input';
-import { Button } from '../../atoms/Button';
+import { createMetaSchema, type CreateMetaInput } from '@/schemas/meta';
+import { useCreateMeta, useUpdateMeta, useDeleteMeta } from '@/hooks/useMetas';
+import type { Meta } from '@/types';
+import { ModalHeader } from '@/components/molecules/ModalHeader';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { FormField } from '@/components/molecules/FormField';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
 
 interface ModalMetaProps {
   open: boolean;

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { gastosApi } from '../services/api/gastos';
+import { gastosApi } from '@/services/api/gastos';
 
 export function useGastos() {
   return useQuery({ queryKey: ['gastos'], queryFn: gastosApi.list });

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { metasApi } from '../services/api/metas';
+import { metasApi } from '@/services/api/metas';
 
 export function useMetas() {
   return useQuery({

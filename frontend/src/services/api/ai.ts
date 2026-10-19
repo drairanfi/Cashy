@@ -5,7 +5,7 @@ import type {
   AiChatMessage,
   AiChatResponse,
   InsightsResponse,
-} from '../../types';
+} from '@/types';
 
 export const aiApi = {
   status: () => apiFetch<{ enabled: boolean }>('/ai/status'),

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { upsertSueldoSchema, type UpsertSueldoInput } from '../../../schemas/sueldo';
-import { useUpsertSueldo } from '../../../hooks/useSueldo';
-import { ModalHeader } from '../../molecules/ModalHeader';
-import { FormField } from '../../molecules/FormField';
-import { Input } from '../../atoms/Input';
-import { Button } from '../../atoms/Button';
+import { upsertSueldoSchema, type UpsertSueldoInput } from '@/schemas/sueldo';
+import { useUpsertSueldo } from '@/hooks/useSueldo';
+import { ModalHeader } from '@/components/molecules/ModalHeader';
+import { FormField } from '@/components/molecules/FormField';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
 
 interface ModalConfigurarSueldoProps {
   open: boolean;

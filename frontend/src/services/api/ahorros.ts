@@ -1,5 +1,5 @@
 import { apiFetch } from './client';
-import type { Ahorro } from '../../types';
+import type { Ahorro } from '@/types';
 
 export const ahorrosApi = {
   list: () => apiFetch<Ahorro[]>('/ahorros'),

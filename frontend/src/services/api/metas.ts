@@ -1,5 +1,5 @@
 import { apiFetch } from './client';
-import type { Meta } from '../../types';
+import type { Meta } from '@/types';
 
 export const metasApi = {
   list: () => apiFetch<Meta[]>('/metas'),

@@ -1,5 +1,5 @@
 import { apiFetch } from './client';
-import type { GimnasioRegistro } from '../../types';
+import type { GimnasioRegistro } from '@/types';
 
 export const gimnasioApi = {
   list: () => apiFetch<GimnasioRegistro[]>('/gimnasio'),

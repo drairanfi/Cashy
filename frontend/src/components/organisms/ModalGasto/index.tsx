@@ -1,17 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { gastoFormSchema, simpleGastoFormSchema } from '../../../schemas/movimientos';
-import { GASTO_CATEGORIAS, type GastoCategoria } from '../../../types';
-import { ModalHeader } from '../../molecules/ModalHeader';
-import { FormField } from '../../molecules/FormField';
-import { Input } from '../../atoms/Input';
-import { Button } from '../../atoms/Button';
+import { gastoFormSchema, simpleGastoFormSchema } from '@/schemas/movimientos';
+import { GASTO_CATEGORIAS } from '@/types';
+import { useCategorias } from '@/hooks/useCategorias';
+import { ModalHeader } from '@/components/molecules/ModalHeader';
+import { FormField } from '@/components/molecules/FormField';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
 
 export interface GastoFormData {
   descripcion: string;
   monto: number;
-  categoria?: GastoCategoria;
+  categoria?: string;
 }
 
 interface ModalGastoProps {
@@ -34,6 +35,14 @@ export function ModalGasto({
   submitLabel = 'Guardar',
 }: ModalGastoProps) {
   const schema = conCategoria ? gastoFormSchema : simpleGastoFormSchema;
+  const { data: categorias = [] } = useCategorias(conCategoria);
+  const opciones = useMemo(() => {
+    const personalizadas = categorias
+      .map((c) => c.nombre)
+      .filter((nombre) => !GASTO_CATEGORIAS.includes(nombre as (typeof GASTO_CATEGORIAS)[number]));
+    return [...GASTO_CATEGORIAS, ...personalizadas];
+  }, [categorias]);
+
   const {
     register,
     handleSubmit,
@@ -78,7 +87,7 @@ export function ModalGasto({
           {conCategoria && (
             <FormField label="Categoría" error={(errors as any).categoria?.message}>
               <select className="input" {...register('categoria')}>
-                {GASTO_CATEGORIAS.map((c) => (
+                {opciones.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>

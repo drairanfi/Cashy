@@ -35,13 +35,17 @@ export interface DashboardResumen {
 }
 
 export const GASTO_CATEGORIAS = ['Hogar', 'Transporte', 'Ocio', 'Salud', 'Otros'] as const;
-export type GastoCategoria = (typeof GASTO_CATEGORIAS)[number];
+
+export interface Categoria {
+  id: string;
+  nombre: string;
+}
 
 export interface Gasto {
   id: string;
   descripcion: string;
   monto: number;
-  categoria: GastoCategoria;
+  categoria: string;
   fecha: string;
 }
 

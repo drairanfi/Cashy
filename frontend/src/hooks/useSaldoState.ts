@@ -4,7 +4,7 @@ import {
   SALDO_UMBRALES_DEFAULT,
   type SaldoState,
   type SaldoUmbrales,
-} from '../utils/saldo';
+} from '@/utils/saldo';
 
 export function useSaldoState(
   saldo: number,

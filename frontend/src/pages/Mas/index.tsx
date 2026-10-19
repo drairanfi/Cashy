@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/userStore';
-import { clearTokens } from '../../services/api/client';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { PageHeader } from '../../components/molecules/PageHeader';
-import { Button } from '../../components/atoms/Button';
+import { useUserStore } from '@/store/userStore';
+import { clearTokens } from '@/services/api/client';
+import { DashboardLayout } from '@/components/templates/DashboardLayout';
+import { PageHeader } from '@/components/molecules/PageHeader';
+import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { Button } from '@/components/atoms/Button';
 
 export function Mas() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export function Mas() {
 
   return (
     <DashboardLayout>
+      <Breadcrumbs items={[{ label: 'Inicio', to: '/' }, { label: 'Más' }]} />
       <PageHeader title="Más" />
 
       <section className="section">
@@ -30,8 +32,8 @@ export function Mas() {
           <div className="flex items-center gap-3">
             <span className="avatar">{user?.nombre.charAt(0).toUpperCase() ?? 'U'}</span>
             <div className="flex flex-col">
-              <p className="text-sm font-medium text-zinc-100">{user?.nombre ?? 'Usuario'}</p>
-              <p className="text-xs text-zinc-400">{user?.email ?? '—'}</p>
+              <p className="text-sm font-medium text-ink">{user?.nombre ?? 'Usuario'}</p>
+              <p className="text-xs text-muted">{user?.email ?? '—'}</p>
             </div>
           </div>
         </div>
@@ -41,11 +43,11 @@ export function Mas() {
         <h2 className="section__title">Preferencias</h2>
         <div className="flex flex-col gap-3">
           <div className="item-card">
-            <p className="text-sm font-medium text-zinc-100">Notificaciones</p>
+            <p className="text-sm font-medium text-ink">Notificaciones</p>
             <Toggle checked={notificaciones} onChange={setNotificaciones} />
           </div>
           <div className="item-card">
-            <p className="text-sm font-medium text-zinc-100">Resumen mensual por email</p>
+            <p className="text-sm font-medium text-ink">Resumen mensual por email</p>
             <Toggle checked={resumenMensual} onChange={setResumenMensual} />
           </div>
         </div>
@@ -69,7 +71,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-        checked ? 'bg-violet-500' : 'bg-zinc-700'
+        checked ? 'bg-brand' : 'bg-line'
       }`}
     >
       <span

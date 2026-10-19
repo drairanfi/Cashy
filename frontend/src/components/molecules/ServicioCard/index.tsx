@@ -1,5 +1,5 @@
-import type { Servicio } from '../../../types';
-import { formatCurrency } from '../../../utils/format';
+import type { Servicio } from '@/types';
+import { formatCurrency } from '@/utils/format';
 
 interface ServicioCardProps {
   servicio: Servicio;

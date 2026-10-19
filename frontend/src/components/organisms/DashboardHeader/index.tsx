@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react';
-import { useSaldoState } from '../../../hooks/useSaldoState';
-import { SaldoStateIndicator } from '../../atoms/SaldoStateIndicator';
-import { SALDO_STATE_CLASSES, type SaldoUmbrales } from '../../../utils/saldo';
-import { formatCurrency } from '../../../utils/format';
+import { useSaldoState } from '@/hooks/useSaldoState';
+import { SaldoStateIndicator } from '@/components/atoms/SaldoStateIndicator';
+import { SALDO_STATE_CLASSES, type SaldoUmbrales } from '@/utils/saldo';
+import { formatCurrency } from '@/utils/format';
 type StatTone = 'emerald' | 'rose' | 'sky';
 
 const STAT_TONES: Record<StatTone, string> = {
-  emerald: 'bg-emerald-500/15 text-emerald-400',
-  rose: 'bg-rose-500/15 text-rose-400',
-  sky: 'bg-sky-500/15 text-sky-400',
+  emerald: 'bg-emerald-100 text-emerald-600',
+  rose: 'bg-rose-100 text-rose-600',
+  sky: 'bg-sky-100 text-sky-600',
 };
 
 interface StatCardProps {
@@ -57,8 +57,8 @@ export function DashboardHeader({
     <header className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-zinc-400">Hola,</p>
-          <h1 className="text-2xl font-bold text-white">{nombre}</h1>
+          <p className="text-sm text-muted">Hola,</p>
+          <h1 className="font-display text-2xl font-extrabold text-ink">{nombre}</h1>
         </div>
         <div className="flex items-center gap-3">
           <button

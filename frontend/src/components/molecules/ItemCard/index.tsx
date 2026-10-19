@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
-import { formatCurrency } from '../../../utils/format';
+import { formatCurrency } from '@/utils/format';
 
 interface ItemCardProps {
   titulo: string;
-  monto: number;
+  monto?: number;
   badge?: ReactNode;
   onDelete?: () => void;
 }
@@ -16,7 +16,7 @@ export function ItemCard({ titulo, monto, badge, onDelete }: ItemCardProps) {
         {badge && <div className="item-card__meta">{badge}</div>}
       </div>
       <div className="item-card__actions">
-        <p className="item-card__monto">{formatCurrency(monto)}</p>
+        {monto !== undefined && <p className="item-card__monto">{formatCurrency(monto)}</p>}
         {onDelete && (
           <button
             type="button"

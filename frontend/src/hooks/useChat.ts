@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { aiApi } from '../services/api/ai';
-import type { AiAction, AiChatMessage } from '../types';
+import { aiApi } from '@/services/api/ai';
+import type { AiAction, AiChatMessage } from '@/types';
 
 export function useChat() {
   return useMutation({

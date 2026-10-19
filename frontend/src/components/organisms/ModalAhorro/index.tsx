@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ahorroFormSchema } from '../../../schemas/movimientos';
-import { ModalHeader } from '../../molecules/ModalHeader';
-import { FormField } from '../../molecules/FormField';
-import { Input } from '../../atoms/Input';
-import { Button } from '../../atoms/Button';
+import { ahorroFormSchema } from '@/schemas/movimientos';
+import { ModalHeader } from '@/components/molecules/ModalHeader';
+import { FormField } from '@/components/molecules/FormField';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
 
 interface ModalAhorroProps {
   open: boolean;

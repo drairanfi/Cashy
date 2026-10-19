@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { useGimnasio, useCreateGimnasio, useDeleteGimnasio } from '../../hooks/useGimnasio';
-import type { GimnasioRegistro } from '../../types';
-import { formatCurrency } from '../../utils/format';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { PageHeader } from '../../components/molecules/PageHeader';
-import { ItemCard } from '../../components/molecules/ItemCard';
-import { Badge } from '../../components/atoms/Badge';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
-import { ModalGasto } from '../../components/organisms/ModalGasto';
+import { useGimnasio, useCreateGimnasio, useDeleteGimnasio } from '@/hooks/useGimnasio';
+import type { GimnasioRegistro } from '@/types';
+import { formatCurrency } from '@/utils/format';
+import { DashboardLayout } from '@/components/templates/DashboardLayout';
+import { PageHeader } from '@/components/molecules/PageHeader';
+import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { AddCard } from '@/components/molecules/AddCard';
+import { ItemCard } from '@/components/molecules/ItemCard';
+import { Badge } from '@/components/atoms/Badge';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { ModalGasto } from '@/components/organisms/ModalGasto';
 
 export function Gimnasio() {
   const { data: gimnasio = [] } = useGimnasio();
@@ -21,14 +23,15 @@ export function Gimnasio() {
 
   return (
     <DashboardLayout>
-      <PageHeader
-        title="Gimnasio"
-        subtitle={`Total: ${formatCurrency(total)}`}
-        actionLabel="Agregar actividad"
-        onAction={() => setModalOpen(true)}
-      />
+      <Breadcrumbs items={[{ label: 'Inicio', to: '/' }, { label: 'Gimnasio' }]} />
+      <PageHeader title="Gimnasio" subtitle={`Total: ${formatCurrency(total)}`} />
 
       <div className="section__list">
+        <AddCard
+          title="Agregar actividad"
+          hint="Registrá tu entrenamiento o actividad"
+          onClick={() => setModalOpen(true)}
+        />
         {gimnasio.length === 0 ? (
           <p className="section__empty">Todavía no cargaste actividades.</p>
         ) : (

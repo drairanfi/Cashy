@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { aporteSchema } from '../../../schemas/movimientos';
-import { ModalHeader } from '../../molecules/ModalHeader';
-import { FormField } from '../../molecules/FormField';
-import { Input } from '../../atoms/Input';
-import { Button } from '../../atoms/Button';
+import { aporteSchema } from '@/schemas/movimientos';
+import { ModalHeader } from '@/components/molecules/ModalHeader';
+import { FormField } from '@/components/molecules/FormField';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
 
 interface ModalAporteProps {
   open: boolean;
@@ -39,7 +39,7 @@ export function ModalAporte({ open, nombre, onClose, onSave }: ModalAporteProps)
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <ModalHeader title="Aportar a meta" onClose={onClose} />
         <p className="confirm-dialog__message">
-          El monto se suma al total ya ahorrado de <span className="font-medium text-white">{nombre}</span>.
+          El monto se suma al total ya ahorrado de <span className="font-medium text-ink">{nombre}</span>.
         </p>
         <form onSubmit={onSubmit} className="modal__body">
           <FormField label="Monto a aportar" error={(errors as any).monto?.message}>

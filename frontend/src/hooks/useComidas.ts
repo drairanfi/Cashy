@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { comidasApi } from '../services/api/comidas';
+import { comidasApi } from '@/services/api/comidas';
 
 export function useComidas() {
   return useQuery({ queryKey: ['comidas'], queryFn: comidasApi.list });

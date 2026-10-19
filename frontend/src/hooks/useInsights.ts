@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { aiApi } from '../services/api/ai';
+import { aiApi } from '@/services/api/ai';
 
 export function useAiStatus() {
   return useQuery({

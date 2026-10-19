@@ -1,10 +1,9 @@
 import { z } from 'zod';
-import { GASTO_CATEGORIAS } from '../types';
 
 export const gastoFormSchema = z.object({
   descripcion: z.string().min(2, 'La descripción es requerida'),
   monto: z.coerce.number().positive('El monto debe ser mayor a 0'),
-  categoria: z.enum(GASTO_CATEGORIAS),
+  categoria: z.string().min(1, 'Elegí una categoría').max(30),
 });
 export type GastoFormInput = z.infer<typeof gastoFormSchema>;
 
