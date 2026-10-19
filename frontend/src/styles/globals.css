@@ -283,6 +283,29 @@
     @apply flex h-9 w-9 items-center justify-center rounded-xl text-muted transition-colors hover:bg-cream hover:text-ink;
   }
 
+  /* ── RegistroRapido ── */
+  .registro-rapido {
+    @apply flex flex-col gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm;
+  }
+  .registro-rapido__header { @apply flex items-center justify-between gap-3; }
+  .registro-rapido__title { @apply font-display text-base font-bold text-ink; }
+  .registro-rapido__feedback { @apply text-xs font-medium text-emerald-600; }
+  .registro-rapido__controls { @apply flex flex-wrap items-center justify-between gap-3; }
+
+  /* ── Segmented ── */
+  .segmented { @apply inline-flex rounded-xl border border-line bg-cream p-1; }
+  .segmented__option {
+    @apply relative flex cursor-pointer items-center justify-center rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition-colors;
+  }
+  .segmented__option--active { @apply bg-white text-ink shadow-sm; }
+  .segmented__option:focus-within { @apply ring-2 ring-brand ring-offset-2 ring-offset-cream; }
+  .segmented__input { @apply sr-only; }
+
+  /* ── MovimientoRow ── */
+  .movimiento-row { @apply block rounded-2xl transition-shadow; }
+  .movimiento-row:hover .item-card { @apply border-brand/40 shadow-md; }
+  .movimiento-row__fecha { @apply text-xs text-muted; }
+
   /* ── AhorroCard ── */
   .ahorro-card { @apply flex flex-col gap-3 rounded-2xl border border-line bg-white p-4 shadow-sm; }
   .ahorro-card__header { @apply flex items-center justify-between; }
