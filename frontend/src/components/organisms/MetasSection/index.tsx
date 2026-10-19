@@ -1,6 +1,6 @@
-import type { Meta } from '../../../types';
-import { MetaCard } from '../../molecules/MetaCard';
-import { Button } from '../../atoms/Button';
+import type { Meta } from '@/types';
+import { MetaCard } from '@/components/molecules/MetaCard';
+import { Button } from '@/components/atoms/Button';
 
 interface MetasSectionProps {
   metas: Meta[];

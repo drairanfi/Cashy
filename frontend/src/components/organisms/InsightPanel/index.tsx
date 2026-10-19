@@ -1,8 +1,8 @@
-import { Badge } from '../../atoms/Badge';
-import { Button } from '../../atoms/Button';
-import { ModalHeader } from '../../molecules/ModalHeader';
-import { useInsights, useRefreshInsights } from '../../../hooks/useInsights';
-import type { InsightTipo } from '../../../types';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { ModalHeader } from '@/components/molecules/ModalHeader';
+import { useInsights, useRefreshInsights } from '@/hooks/useInsights';
+import type { InsightTipo } from '@/types';
 
 const TONES: Record<InsightTipo, 'danger' | 'warning' | 'neutral'> = {
   alerta: 'danger',

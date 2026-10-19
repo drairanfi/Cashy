@@ -4,15 +4,16 @@ import {
   useAportarAhorro,
   useCreateAhorro,
   useDeleteAhorro,
-} from '../../hooks/useAhorros';
-import type { Ahorro } from '../../types';
-import { formatCurrency } from '../../utils/format';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { PageHeader } from '../../components/molecules/PageHeader';
-import { AhorroCard } from '../../components/molecules/AhorroCard';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
-import { ModalAhorro } from '../../components/organisms/ModalAhorro';
-import { ModalAporte } from '../../components/organisms/ModalAporte';
+} from '@/hooks/useAhorros';
+import type { Ahorro } from '@/types';
+import { formatCurrency } from '@/utils/format';
+import { DashboardLayout } from '@/components/templates/DashboardLayout';
+import { PageHeader } from '@/components/molecules/PageHeader';
+import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { AhorroCard } from '@/components/molecules/AhorroCard';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { ModalAhorro } from '@/components/organisms/ModalAhorro';
+import { ModalAporte } from '@/components/organisms/ModalAporte';
 
 export function Ahorros() {
   const { data: ahorros = [] } = useAhorros();
@@ -29,6 +30,7 @@ export function Ahorros() {
 
   return (
     <DashboardLayout>
+      <Breadcrumbs items={[{ label: 'Inicio', to: '/' }, { label: 'Ahorros' }]} />
       <PageHeader
         title="Ahorros"
         subtitle={`${formatCurrency(totalAhorrado)} de ${formatCurrency(totalObjetivo)}`}

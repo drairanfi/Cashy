@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { gimnasioApi } from '../services/api/gimnasio';
+import { gimnasioApi } from '@/services/api/gimnasio';
 
 export function useGimnasio() {
   return useQuery({ queryKey: ['gimnasio'], queryFn: gimnasioApi.list });

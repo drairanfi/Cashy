@@ -1,4 +1,4 @@
-import { SALDO_STATE_LABELS, type SaldoState } from '../../../utils/saldo';
+import { SALDO_STATE_LABELS, type SaldoState } from '@/utils/saldo';
 
 interface SaldoStateIndicatorProps {
   state: SaldoState;

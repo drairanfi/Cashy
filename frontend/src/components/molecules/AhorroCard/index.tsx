@@ -1,6 +1,6 @@
-import type { Ahorro } from '../../../types';
-import { formatCurrency } from '../../../utils/format';
-import { Badge } from '../../atoms/Badge';
+import type { Ahorro } from '@/types';
+import { formatCurrency } from '@/utils/format';
+import { Badge } from '@/components/atoms/Badge';
 
 interface AhorroCardProps {
   ahorro: Ahorro;

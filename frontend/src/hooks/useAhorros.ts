@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ahorrosApi } from '../services/api/ahorros';
+import { ahorrosApi } from '@/services/api/ahorros';
 
 export function useAhorros() {
   return useQuery({ queryKey: ['ahorros'], queryFn: ahorrosApi.list });

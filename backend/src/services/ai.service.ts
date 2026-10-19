@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { env } from '../config/env.js';
 import { HttpError } from '../utils/httpError.js';
 import { formatMoney } from '../utils/money.js';
+import { GASTO_CATEGORIAS } from '../schemas/gasto.schema.js';
 import { userRepository } from '../repositories/user.repository.js';
 import { sueldoRepository } from '../repositories/sueldo.repository.js';
 import { servicioRepository } from '../repositories/servicio.repository.js';
@@ -10,9 +11,10 @@ import { gastoRepository } from '../repositories/gasto.repository.js';
 import { comidaRepository } from '../repositories/comida.repository.js';
 import { gimnasioRepository } from '../repositories/gimnasio.repository.js';
 import { ahorroRepository } from '../repositories/ahorro.repository.js';
+import { categoriaRepository } from '../repositories/categoria.repository.js';
 import { insightsModelSchema, type ChatInput, type Insight } from '../schemas/ai.schema.js';
 import {
-  AI_TOOL_DEFINITIONS,
+  buildToolDefinitions,
   buildProposedAction,
   executeAction,
   type ActionInput,
@@ -140,16 +142,18 @@ async function callModel(
 }
 
 async function buildFinancialContext(usuarioId: string): Promise<string> {
-  const [usuario, sueldo, servicios, metas, gastos, comidas, gimnasio, ahorros] = await Promise.all([
-    userRepository.findById(usuarioId),
-    sueldoRepository.findByUsuario(usuarioId),
-    servicioRepository.findByUsuario(usuarioId),
-    metaRepository.findByUsuario(usuarioId),
-    gastoRepository.findByUsuario(usuarioId),
-    comidaRepository.findByUsuario(usuarioId),
-    gimnasioRepository.findByUsuario(usuarioId),
-    ahorroRepository.findByUsuario(usuarioId),
-  ]);
+  const [usuario, sueldo, servicios, metas, gastos, comidas, gimnasio, ahorros, categorias] =
+    await Promise.all([
+      userRepository.findById(usuarioId),
+      sueldoRepository.findByUsuario(usuarioId),
+      servicioRepository.findByUsuario(usuarioId),
+      metaRepository.findByUsuario(usuarioId),
+      gastoRepository.findByUsuario(usuarioId),
+      comidaRepository.findByUsuario(usuarioId),
+      gimnasioRepository.findByUsuario(usuarioId),
+      ahorroRepository.findByUsuario(usuarioId),
+      categoriaRepository.findByUsuario(usuarioId),
+    ]);
 
   const hoy = new Date();
   const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
@@ -193,6 +197,7 @@ async function buildFinancialContext(usuarioId: string): Promise<string> {
     `Fecha de hoy: ${hoy.toISOString().slice(0, 10)} (día ${diaActual} de ${diasDelMes}, quedan ${diasRestantes} días del mes).`,
     `Nombre del usuario: ${usuario?.nombre ?? 'Usuario'}.`,
     'Todos los montos están en pesos colombianos (COP).',
+    `Categorías de gasto disponibles: ${[...GASTO_CATEGORIAS, ...categorias.map((c) => c.nombre)].join(', ')}.`,
     '',
     'INGRESOS',
     `Sueldo mensual: ${formatMoney(sueldoMonto)}.`,
@@ -334,7 +339,10 @@ export async function generateInsights(usuarioId: string, force = false): Promis
 export async function chat(usuarioId: string, input: ChatInput): Promise<ChatResponse> {
   ensureAiEnabled();
 
-  const contexto = await buildFinancialContext(usuarioId);
+  const [contexto, categorias] = await Promise.all([
+    buildFinancialContext(usuarioId),
+    categoriaRepository.findByUsuario(usuarioId),
+  ]);
   const messages: ChatCompletionMessage[] = [
     { role: 'system', content: `${SYSTEM_CHAT}\n\nContexto financiero actual del usuario:\n${contexto}` },
     ...input.messages,
@@ -343,7 +351,7 @@ export async function chat(usuarioId: string, input: ChatInput): Promise<ChatRes
   const { content, toolCalls } = await callModelMessage(usuarioId, messages, {
     maxTokens: 2500,
     temperature: 0.5,
-    tools: AI_TOOL_DEFINITIONS,
+    tools: buildToolDefinitions(categorias.map((c) => c.nombre)),
   });
 
   const actions = toolCalls

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useChat, useConfirmActions } from '../../../hooks/useChat';
-import { useAiStatus } from '../../../hooks/useInsights';
-import { useSpeech } from '../../../hooks/useSpeech';
-import { normalizeTranscript, stripWakeWord } from '../../../utils/speech';
-import { Button } from '../../atoms/Button';
-import type { AiAction, AiChatMessage } from '../../../types';
+import { useChat, useConfirmActions } from '@/hooks/useChat';
+import { useAiStatus } from '@/hooks/useInsights';
+import { useSpeech } from '@/hooks/useSpeech';
+import { normalizeTranscript, stripWakeWord } from '@/utils/speech';
+import { Button } from '@/components/atoms/Button';
+import type { AiAction, AiChatMessage } from '@/types';
 
 interface ChatItem {
   key: string;

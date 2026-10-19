@@ -5,7 +5,7 @@ export const GASTO_CATEGORIAS = ['Hogar', 'Transporte', 'Ocio', 'Salud', 'Otros'
 export const createGastoSchema = z.object({
   descripcion: z.string().min(2).max(100),
   monto: z.number().positive(),
-  categoria: z.enum(GASTO_CATEGORIAS),
+  categoria: z.string().trim().min(1).max(30),
 });
 
 export type CreateGastoInput = z.infer<typeof createGastoSchema>;

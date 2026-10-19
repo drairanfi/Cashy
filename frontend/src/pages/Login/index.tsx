@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { authApi } from '../../services/api/auth';
-import { loginSchema, type LoginInput } from '../../schemas/auth';
-import { useUserStore } from '../../store/userStore';
-import { AuthLayout } from '../../components/templates/AuthLayout';
-import { FormField } from '../../components/molecules/FormField';
-import { Input } from '../../components/atoms/Input';
-import { Button } from '../../components/atoms/Button';
+import { authApi } from '@/services/api/auth';
+import { loginSchema, type LoginInput } from '@/schemas/auth';
+import { useUserStore } from '@/store/userStore';
+import { AuthLayout } from '@/components/templates/AuthLayout';
+import { FormField } from '@/components/molecules/FormField';
+import { Input } from '@/components/atoms/Input';
+import { Button } from '@/components/atoms/Button';
 
 export function Login() {
   const navigate = useNavigate();

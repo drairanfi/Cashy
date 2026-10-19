@@ -17,6 +17,7 @@ model Usuario {
   servicios Servicio[]
   metas     Meta[]
   gastos    Gasto[]
+  categorias Categoria[]
   comidas   Comida[]
   gimnasio  Gimnasio[]
   ahorros   Ahorro[]
@@ -70,6 +71,17 @@ model Gasto {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  @@index([usuarioId])
+}
+
+model Categoria {
+  id        String   @id @default(uuid())
+  usuarioId String
+  nombre    String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([usuarioId, nombre])
   @@index([usuarioId])
 }
 

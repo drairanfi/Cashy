@@ -1,5 +1,5 @@
-import type { Meta } from '../../../types';
-import { formatCurrency } from '../../../utils/format';
+import type { Meta } from '@/types';
+import { formatCurrency } from '@/utils/format';
 
 interface MetaCardProps {
   meta: Meta;

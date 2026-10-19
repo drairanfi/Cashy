@@ -173,10 +173,34 @@ export const AI_TOOL_DEFINITIONS = [
   },
 ];
 
+export function buildToolDefinitions(categorias: string[]) {
+  const disponibles = [...GASTO_CATEGORIAS, ...categorias];
+  return AI_TOOL_DEFINITIONS.map((tool) => {
+    if (tool.function.name !== 'crear_gasto') return tool;
+    return {
+      ...tool,
+      function: {
+        ...tool.function,
+        parameters: {
+          ...tool.function.parameters,
+          properties: {
+            ...tool.function.parameters.properties,
+            categoria: {
+              type: 'string',
+              enum: disponibles,
+              description: 'Categoría del gasto. Usá una de las categorías disponibles del usuario.',
+            },
+          },
+        },
+      },
+    };
+  });
+}
+
 const crearGastoArgs = z.object({
   descripcion: z.string().min(2).max(100),
   monto: z.number().positive(),
-  categoria: z.enum(GASTO_CATEGORIAS).default('Otros'),
+  categoria: z.string().trim().min(1).max(30).default('Otros'),
 });
 
 const crearComidaArgs = z.object({

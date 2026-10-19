@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { sueldoApi } from '../services/api/sueldo';
+import { sueldoApi } from '@/services/api/sueldo';
 
 export function useSueldo() {
   return useQuery({

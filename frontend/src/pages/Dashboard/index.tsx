@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { useDashboard } from '../../hooks/useDashboard';
-import { useServicios } from '../../hooks/useServicios';
-import { useMetas } from '../../hooks/useMetas';
-import { useInsights } from '../../hooks/useInsights';
-import { useUserStore } from '../../store/userStore';
-import type { Servicio, Meta } from '../../types';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { DashboardHeader } from '../../components/organisms/DashboardHeader';
-import { InsightPanel } from '../../components/organisms/InsightPanel';
-import { MetasSection } from '../../components/organisms/MetasSection';
-import { ServiciosSection } from '../../components/organisms/ServiciosSection';
-import { ModalServicio } from '../../components/organisms/ModalServicio';
-import { ModalMeta } from '../../components/organisms/ModalMeta';
-import { ModalConfigurarSueldo } from '../../components/organisms/ModalConfigurarSueldo';
-import { Button } from '../../components/atoms/Button';
+import { useDashboard } from '@/hooks/useDashboard';
+import { useServicios } from '@/hooks/useServicios';
+import { useMetas } from '@/hooks/useMetas';
+import { useInsights } from '@/hooks/useInsights';
+import { useUserStore } from '@/store/userStore';
+import type { Servicio, Meta } from '@/types';
+import { DashboardLayout } from '@/components/templates/DashboardLayout';
+import { DashboardHeader } from '@/components/organisms/DashboardHeader';
+import { InsightPanel } from '@/components/organisms/InsightPanel';
+import { MetasSection } from '@/components/organisms/MetasSection';
+import { ServiciosSection } from '@/components/organisms/ServiciosSection';
+import { ModalServicio } from '@/components/organisms/ModalServicio';
+import { ModalMeta } from '@/components/organisms/ModalMeta';
+import { ModalConfigurarSueldo } from '@/components/organisms/ModalConfigurarSueldo';
+import { Button } from '@/components/atoms/Button';
 
 export function Dashboard() {
   const user = useUserStore((s) => s.user);

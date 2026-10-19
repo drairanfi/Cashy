@@ -1,5 +1,5 @@
 import { apiFetch } from './client';
-import type { Sueldo } from '../../types';
+import type { Sueldo } from '@/types';
 
 export const sueldoApi = {
   get: () => apiFetch<Sueldo | null>('/sueldo'),

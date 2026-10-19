@@ -1,5 +1,5 @@
 import { apiFetch, setTokens } from './client';
-import type { AuthResponse, MeResponse } from '../../types/api';
+import type { AuthResponse, MeResponse } from '@/types/api';
 
 export const authApi = {
   async register(data: { email: string; password: string; nombre: string }) {
