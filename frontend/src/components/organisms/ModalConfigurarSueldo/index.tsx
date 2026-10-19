@@ -54,7 +54,7 @@ export function ModalConfigurarSueldo({ open, onClose, currentMonto }: ModalConf
           {upsertSueldo.isError && (
             <p className="form-field__error">{(upsertSueldo.error as Error).message}</p>
           )}
-          <Button type="submit" disabled={upsertSueldo.isPending}>
+          <Button type="submit" disabled={upsertSueldo.isPending} aria-busy={upsertSueldo.isPending}>
             {upsertSueldo.isPending ? 'Guardando...' : 'Guardar'}
           </Button>
         </form>

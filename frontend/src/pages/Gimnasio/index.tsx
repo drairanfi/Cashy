@@ -2,17 +2,21 @@ import { useState } from 'react';
 import { useGimnasio, useCreateGimnasio, useDeleteGimnasio } from '@/hooks/useGimnasio';
 import type { GimnasioRegistro } from '@/types';
 import { formatCurrency } from '@/utils/format';
+import { categoriaTone } from '@/utils/categoriaTone';
 import { DashboardLayout } from '@/components/templates/DashboardLayout';
 import { PageHeader } from '@/components/molecules/PageHeader';
 import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 import { AddCard } from '@/components/molecules/AddCard';
 import { ItemCard } from '@/components/molecules/ItemCard';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { ListSkeleton } from '@/components/molecules/ListSkeleton';
 import { Badge } from '@/components/atoms/Badge';
+import { DumbbellIcon } from '@/components/atoms/Icon';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { ModalGasto } from '@/components/organisms/ModalGasto';
 
 export function Gimnasio() {
-  const { data: gimnasio = [] } = useGimnasio();
+  const { data: gimnasio = [], isLoading } = useGimnasio();
   const createGimnasio = useCreateGimnasio();
   const deleteGimnasio = useDeleteGimnasio();
 
@@ -26,21 +30,29 @@ export function Gimnasio() {
       <Breadcrumbs items={[{ label: 'Inicio', to: '/' }, { label: 'Gimnasio' }]} />
       <PageHeader title="Gimnasio" subtitle={`Total: ${formatCurrency(total)}`} />
 
-      <div className="section__list">
+      <div className="section__list" aria-busy={isLoading}>
         <AddCard
           title="Agregar actividad"
           hint="Registrá tu entrenamiento o actividad"
           onClick={() => setModalOpen(true)}
         />
-        {gimnasio.length === 0 ? (
-          <p className="section__empty">Todavía no cargaste actividades.</p>
+        {isLoading ? (
+          <ListSkeleton />
+        ) : gimnasio.length === 0 ? (
+          <EmptyState
+            icon={<DumbbellIcon size={24} />}
+            title="Todavía no cargaste actividades"
+            text="Sumá tus entrenamientos y lo que gastás en el gym."
+            actionLabel="Agregar actividad"
+            onAction={() => setModalOpen(true)}
+          />
         ) : (
           gimnasio.map((registro) => (
             <ItemCard
               key={registro.id}
               titulo={registro.actividad}
               monto={registro.monto}
-              badge={<Badge tone="success">Entrenamiento</Badge>}
+              badge={<Badge tone={categoriaTone('Entrenamiento')}>Entrenamiento</Badge>}
               onDelete={() => setToDelete(registro)}
             />
           ))
@@ -51,8 +63,9 @@ export function Gimnasio() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSave={(data) =>
-          createGimnasio.mutate({ actividad: data.descripcion, monto: data.monto })
+          createGimnasio.mutateAsync({ actividad: data.descripcion, monto: data.monto })
         }
+        submitting={createGimnasio.isPending}
         title="Agregar actividad"
         labelDescripcion="Actividad"
         submitLabel="Guardar actividad"

@@ -1,6 +1,8 @@
 import type { Meta } from '@/types';
 import { MetaCard } from '@/components/molecules/MetaCard';
+import { EmptyState } from '@/components/molecules/EmptyState';
 import { Button } from '@/components/atoms/Button';
+import { TargetIcon } from '@/components/atoms/Icon';
 
 interface MetasSectionProps {
   metas: Meta[];
@@ -19,7 +21,13 @@ export function MetasSection({ metas, onCrear, onEditar }: MetasSectionProps) {
       </div>
       <div className="section__list">
         {metas.length === 0 ? (
-          <p className="section__empty">Todavía no tenés metas.</p>
+          <EmptyState
+            icon={<TargetIcon size={24} />}
+            title="Todavía no tenés metas"
+            text="Definí tus metas de ahorro y seguí cuánto te falta."
+            actionLabel="Agregar meta"
+            onAction={onCrear}
+          />
         ) : (
           metas.map((meta) => <MetaCard key={meta.id} meta={meta} onEdit={onEditar} />)
         )}

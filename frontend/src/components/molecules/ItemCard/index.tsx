@@ -21,7 +21,7 @@ export function ItemCard({ titulo, monto, badge, onDelete }: ItemCardProps) {
           <button
             type="button"
             className="item-card__delete"
-            aria-label="Eliminar"
+            aria-label={`Eliminar ${titulo}`}
             onClick={onDelete}
           >
             <svg

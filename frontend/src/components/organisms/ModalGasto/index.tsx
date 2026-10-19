@@ -18,11 +18,12 @@ export interface GastoFormData {
 interface ModalGastoProps {
   open: boolean;
   onClose: () => void;
-  onSave: (data: GastoFormData) => void;
+  onSave: (data: GastoFormData) => void | Promise<unknown>;
   title: string;
   labelDescripcion?: string;
   conCategoria?: boolean;
   submitLabel?: string;
+  submitting?: boolean;
 }
 
 export function ModalGasto({
@@ -33,6 +34,7 @@ export function ModalGasto({
   labelDescripcion = 'Descripción',
   conCategoria = false,
   submitLabel = 'Guardar',
+  submitting = false,
 }: ModalGastoProps) {
   const schema = conCategoria ? gastoFormSchema : simpleGastoFormSchema;
   const { data: categorias = [] } = useCategorias(conCategoria);
@@ -56,10 +58,14 @@ export function ModalGasto({
 
   if (!open) return null;
 
-  const onSubmit = handleSubmit((data) => {
-    onSave(data as GastoFormData);
-    reset();
-    onClose();
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await onSave(data as GastoFormData);
+      reset();
+      onClose();
+    } catch {
+      // La mutación del padre expone el error; mantenemos el modal abierto.
+    }
   });
 
   return (
@@ -95,7 +101,9 @@ export function ModalGasto({
               </select>
             </FormField>
           )}
-          <Button type="submit">{submitLabel}</Button>
+          <Button type="submit" disabled={submitting} aria-busy={submitting}>
+            {submitting ? 'Guardando...' : submitLabel}
+          </Button>
         </form>
       </div>
     </div>
