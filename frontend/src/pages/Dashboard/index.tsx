@@ -10,6 +10,8 @@ import { DashboardHeader } from '@/components/organisms/DashboardHeader';
 import { InsightPanel } from '@/components/organisms/InsightPanel';
 import { MetasSection } from '@/components/organisms/MetasSection';
 import { ServiciosSection } from '@/components/organisms/ServiciosSection';
+import { RegistroRapido } from '@/components/organisms/RegistroRapido';
+import { UltimosMovimientos } from '@/components/organisms/UltimosMovimientos';
 import { ModalServicio } from '@/components/organisms/ModalServicio';
 import { ModalMeta } from '@/components/organisms/ModalMeta';
 import { ModalConfigurarSueldo } from '@/components/organisms/ModalConfigurarSueldo';
@@ -108,6 +110,10 @@ export function Dashboard() {
           </Button>
         </div>
       )}
+
+      <RegistroRapido />
+
+      <UltimosMovimientos />
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         <MetasSection metas={metas} onCrear={openCreateMeta} onEditar={openEditMeta} />
