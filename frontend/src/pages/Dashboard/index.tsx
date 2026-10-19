@@ -14,6 +14,7 @@ import { ModalServicio } from '@/components/organisms/ModalServicio';
 import { ModalMeta } from '@/components/organisms/ModalMeta';
 import { ModalConfigurarSueldo } from '@/components/organisms/ModalConfigurarSueldo';
 import { Button } from '@/components/atoms/Button';
+import { Skeleton } from '@/components/atoms/Skeleton';
 
 export function Dashboard() {
   const user = useUserStore((s) => s.user);
@@ -53,7 +54,25 @@ export function Dashboard() {
   if (isLoading || !resumen) {
     return (
       <DashboardLayout>
-        <p className="section__empty">Cargando...</p>
+        <div className="flex flex-col gap-6" aria-busy="true" aria-label="Cargando panel">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-7 w-32" />
+            </div>
+            <Skeleton className="h-10 w-10 rounded-full" />
+          </div>
+          <Skeleton className="h-40 w-full rounded-3xl" />
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <Skeleton className="h-28 w-full rounded-2xl" />
+            <Skeleton className="h-28 w-full rounded-2xl" />
+            <Skeleton className="h-28 w-full rounded-2xl" />
+          </div>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <Skeleton className="h-32 w-full rounded-2xl" />
+            <Skeleton className="h-32 w-full rounded-2xl" />
+          </div>
+        </div>
       </DashboardLayout>
     );
   }

@@ -10,12 +10,15 @@ import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 import { PageHeader } from '@/components/molecules/PageHeader';
 import { AddCard } from '@/components/molecules/AddCard';
 import { ItemCard } from '@/components/molecules/ItemCard';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { ListSkeleton } from '@/components/molecules/ListSkeleton';
 import { Badge } from '@/components/atoms/Badge';
+import { TagIcon } from '@/components/atoms/Icon';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { ModalCategoria } from '@/components/organisms/ModalCategoria';
 
 export function Categorias() {
-  const { data: categorias = [] } = useCategorias();
+  const { data: categorias = [], isLoading } = useCategorias();
   const createCategoria = useCreateCategoria();
   const deleteCategoria = useDeleteCategoria();
 
@@ -42,14 +45,22 @@ export function Categorias() {
 
       <section className="section">
         <h2 className="section__title">Personalizadas</h2>
-        <div className="section__list">
+        <div className="section__list" aria-busy={isLoading}>
           <AddCard
             title="Agregar nueva categoría"
             hint="Creá una categoría para clasificar tus gastos"
             onClick={openModal}
           />
-          {categorias.length === 0 ? (
-            <p className="section__empty">Todavía no creaste categorías propias.</p>
+          {isLoading ? (
+            <ListSkeleton count={2} />
+          ) : categorias.length === 0 ? (
+            <EmptyState
+              icon={<TagIcon size={24} />}
+              title="Todavía no creaste categorías propias"
+              text="Armá tus propias categorías para clasificar mejor tus gastos."
+              actionLabel="Nueva categoría"
+              onAction={openModal}
+            />
           ) : (
             categorias.map((categoria) => (
               <ItemCard
@@ -80,6 +91,7 @@ export function Categorias() {
         onClose={() => setModalOpen(false)}
         onSave={handleCreate}
         error={error}
+        submitting={createCategoria.isPending}
       />
 
       <ConfirmDialog

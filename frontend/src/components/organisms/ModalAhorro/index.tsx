@@ -10,10 +10,11 @@ import { Button } from '@/components/atoms/Button';
 interface ModalAhorroProps {
   open: boolean;
   onClose: () => void;
-  onSave: (data: { nombre: string; objetivo: number; actual: number }) => void;
+  onSave: (data: { nombre: string; objetivo: number; actual: number }) => void | Promise<unknown>;
+  submitting?: boolean;
 }
 
-export function ModalAhorro({ open, onClose, onSave }: ModalAhorroProps) {
+export function ModalAhorro({ open, onClose, onSave, submitting = false }: ModalAhorroProps) {
   const {
     register,
     handleSubmit,
@@ -30,10 +31,14 @@ export function ModalAhorro({ open, onClose, onSave }: ModalAhorroProps) {
 
   if (!open) return null;
 
-  const onSubmit = handleSubmit((data) => {
-    onSave(data as { nombre: string; objetivo: number; actual: number });
-    reset();
-    onClose();
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await onSave(data as { nombre: string; objetivo: number; actual: number });
+      reset();
+      onClose();
+    } catch {
+      // La mutación del padre expone el error; mantenemos el modal abierto.
+    }
   });
 
   return (
@@ -68,7 +73,9 @@ export function ModalAhorro({ open, onClose, onSave }: ModalAhorroProps) {
               placeholder="0"
             />
           </FormField>
-          <Button type="submit">Crear meta</Button>
+          <Button type="submit" disabled={submitting} aria-busy={submitting}>
+            {submitting ? 'Creando...' : 'Crear meta'}
+          </Button>
         </form>
       </div>
     </div>

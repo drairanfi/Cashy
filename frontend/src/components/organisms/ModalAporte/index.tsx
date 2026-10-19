@@ -11,10 +11,11 @@ interface ModalAporteProps {
   open: boolean;
   nombre: string;
   onClose: () => void;
-  onSave: (monto: number) => void;
+  onSave: (monto: number) => void | Promise<unknown>;
+  submitting?: boolean;
 }
 
-export function ModalAporte({ open, nombre, onClose, onSave }: ModalAporteProps) {
+export function ModalAporte({ open, nombre, onClose, onSave, submitting = false }: ModalAporteProps) {
   const {
     register,
     handleSubmit,
@@ -28,10 +29,14 @@ export function ModalAporte({ open, nombre, onClose, onSave }: ModalAporteProps)
 
   if (!open) return null;
 
-  const onSubmit = handleSubmit((data) => {
-    onSave(Number(data.monto));
-    reset();
-    onClose();
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await onSave(Number(data.monto));
+      reset();
+      onClose();
+    } catch {
+      // La mutación del padre expone el error; mantenemos el modal abierto.
+    }
   });
 
   return (
@@ -52,7 +57,9 @@ export function ModalAporte({ open, nombre, onClose, onSave }: ModalAporteProps)
               placeholder="0"
             />
           </FormField>
-          <Button type="submit">Aportar</Button>
+          <Button type="submit" disabled={submitting} aria-busy={submitting}>
+            {submitting ? 'Aportando...' : 'Aportar'}
+          </Button>
         </form>
       </div>
     </div>

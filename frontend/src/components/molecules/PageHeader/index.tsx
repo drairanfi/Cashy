@@ -10,7 +10,7 @@ interface PageHeaderProps {
 export function PageHeader({ title, subtitle, actionLabel, onAction }: PageHeaderProps) {
   return (
     <div className="page-header">
-      <div>
+      <div className="min-w-0">
         <h1 className="page-header__title">{title}</h1>
         {subtitle && <p className="page-header__subtitle">{subtitle}</p>}
       </div>

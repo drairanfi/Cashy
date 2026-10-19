@@ -96,7 +96,7 @@ export function DashboardHeader({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <StatCard label="Ingresos" monto={ingresos} tone="emerald" icon={<ArrowDownIcon />} />
         <StatCard label="Gastos" monto={gastos} tone="rose" icon={<ArrowUpIcon />} />
         <StatCard label="Ahorros" monto={ahorros} tone="sky" icon={<PiggyIcon />} />

@@ -44,11 +44,15 @@ export function Mas() {
         <div className="flex flex-col gap-3">
           <div className="item-card">
             <p className="text-sm font-medium text-ink">Notificaciones</p>
-            <Toggle checked={notificaciones} onChange={setNotificaciones} />
+            <Toggle label="Notificaciones" checked={notificaciones} onChange={setNotificaciones} />
           </div>
           <div className="item-card">
             <p className="text-sm font-medium text-ink">Resumen mensual por email</p>
-            <Toggle checked={resumenMensual} onChange={setResumenMensual} />
+            <Toggle
+              label="Resumen mensual por email"
+              checked={resumenMensual}
+              onChange={setResumenMensual}
+            />
           </div>
         </div>
       </section>
@@ -63,11 +67,20 @@ export function Mas() {
   );
 }
 
-function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+function Toggle({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
   return (
     <button
       type="button"
       role="switch"
+      aria-label={label}
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${

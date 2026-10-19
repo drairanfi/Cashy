@@ -12,9 +12,10 @@ interface ModalCategoriaProps {
   onClose: () => void;
   onSave: (nombre: string) => void;
   error?: string | null;
+  submitting?: boolean;
 }
 
-export function ModalCategoria({ open, onClose, onSave, error }: ModalCategoriaProps) {
+export function ModalCategoria({ open, onClose, onSave, error, submitting = false }: ModalCategoriaProps) {
   const {
     register,
     handleSubmit,
@@ -46,7 +47,9 @@ export function ModalCategoria({ open, onClose, onSave, error }: ModalCategoriaP
             />
           </FormField>
           {error && <p className="form-field__error">{error}</p>}
-          <Button type="submit">Guardar categoría</Button>
+          <Button type="submit" disabled={submitting} aria-busy={submitting}>
+            {submitting ? 'Guardando...' : 'Guardar categoría'}
+          </Button>
         </form>
       </div>
     </div>

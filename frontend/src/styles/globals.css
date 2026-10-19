@@ -11,6 +11,11 @@
   h3 {
     @apply font-display;
   }
+  a:focus-visible,
+  button:focus-visible,
+  [role='switch']:focus-visible {
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-cream;
+  }
 }
 
 @layer components {
@@ -76,20 +81,20 @@
   .saldo-card--warning { @apply border-amber-200 bg-gradient-to-br from-amber-100 to-amber-50 text-amber-900; }
   .saldo-card--success { @apply border-emerald-200 bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-900; }
   .saldo-card__label { @apply text-sm opacity-70; }
-  .saldo-card__monto { @apply mt-2 font-display text-4xl font-extrabold tracking-tight lg:text-5xl; }
+  .saldo-card__monto { @apply mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl; }
   .saldo-card__moneda { @apply mt-1 text-xs uppercase tracking-wide opacity-60; }
   .saldo-card__footer { @apply mt-4 flex items-center justify-between; }
   .saldo-card__pct { @apply text-sm opacity-70; }
 
   /* ── StatCard ── */
   .stat-card {
-    @apply flex flex-col gap-2 rounded-2xl border border-line bg-white p-4 shadow-sm;
+    @apply flex min-w-0 flex-col gap-2 rounded-2xl border border-line bg-white p-3 shadow-sm sm:p-4;
   }
   .stat-card__icon {
     @apply flex h-10 w-10 items-center justify-center rounded-full;
   }
-  .stat-card__label { @apply text-xs text-muted; }
-  .stat-card__monto { @apply font-display text-lg font-bold text-ink; }
+  .stat-card__label { @apply truncate text-xs text-muted; }
+  .stat-card__monto { @apply truncate font-display text-base font-bold text-ink sm:text-lg; }
 
   /* ── IconButton / Avatar ── */
   .icon-button {
@@ -147,10 +152,10 @@
 
   /* ── Modal ── */
   .modal-overlay {
-    @apply fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm;
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-0 backdrop-blur-sm sm:p-4;
   }
   .modal {
-    @apply flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-3xl border border-line bg-white p-6 shadow-xl;
+    @apply flex max-h-[100dvh] w-full max-w-md flex-col overflow-hidden rounded-none border border-line bg-white p-6 shadow-xl sm:max-h-[calc(100dvh-2rem)] sm:rounded-3xl;
   }
   .modal--wide { @apply max-w-lg; }
   .modal__body { @apply mt-4 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto; }
@@ -212,13 +217,15 @@
   .dashboard-content { @apply flex flex-col gap-6; }
 
   .bottom-nav {
-    @apply fixed bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border border-line bg-white/95 px-3 py-2 shadow-lg backdrop-blur lg:hidden;
+    @apply fixed inset-x-0 bottom-0 z-30 flex items-stretch border-t border-line bg-white/95 shadow-[0_-1px_10px_rgba(43,38,34,0.05)] backdrop-blur lg:hidden;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .bottom-nav__item {
-    @apply flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-muted transition-colors;
+    @apply flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-2 text-muted transition-colors;
   }
-  .bottom-nav__item--active { @apply bg-brand-soft text-brand-dark; }
-  .bottom-nav__label { @apply text-xs font-semibold; }
+  .bottom-nav__item--active { @apply text-brand-dark; }
+  .bottom-nav__icon { @apply flex h-5 w-5 items-center justify-center; }
+  .bottom-nav__label { @apply truncate text-[11px] font-semibold leading-none; }
 
   /* ── AddCard ── */
   .add-card {
@@ -235,8 +242,17 @@
   .empty-state {
     @apply flex flex-col items-start gap-3 rounded-2xl border border-dashed border-line bg-white/70 p-5;
   }
+  .empty-state__icon {
+    @apply flex h-12 w-12 items-center justify-center rounded-full bg-brand-soft text-brand-dark;
+  }
+  .empty-state__body { @apply flex flex-col gap-1; }
   .empty-state__title { @apply text-sm font-semibold text-ink; }
   .empty-state__text { @apply text-sm text-muted; }
+
+  /* ── Skeleton ── */
+  .skeleton {
+    @apply block animate-pulse rounded-lg bg-line/80;
+  }
 
   /* ── Breadcrumbs ── */
   .breadcrumbs { @apply -mb-3; }
@@ -247,7 +263,7 @@
   .breadcrumbs__sep { @apply text-muted/60; }
 
   /* ── PageHeader ── */
-  .page-header { @apply flex items-center justify-between gap-4; }
+  .page-header { @apply flex flex-wrap items-center justify-between gap-3; }
   .page-header__title { @apply font-display text-2xl font-extrabold text-ink; }
   .page-header__subtitle { @apply mt-1 text-sm text-muted; }
 

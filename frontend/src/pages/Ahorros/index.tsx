@@ -11,12 +11,15 @@ import { DashboardLayout } from '@/components/templates/DashboardLayout';
 import { PageHeader } from '@/components/molecules/PageHeader';
 import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
 import { AhorroCard } from '@/components/molecules/AhorroCard';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { ListSkeleton } from '@/components/molecules/ListSkeleton';
+import { PiggyIcon } from '@/components/atoms/Icon';
 import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { ModalAhorro } from '@/components/organisms/ModalAhorro';
 import { ModalAporte } from '@/components/organisms/ModalAporte';
 
 export function Ahorros() {
-  const { data: ahorros = [] } = useAhorros();
+  const { data: ahorros = [], isLoading } = useAhorros();
   const createAhorro = useCreateAhorro();
   const aportar = useAportarAhorro();
   const deleteAhorro = useDeleteAhorro();
@@ -38,9 +41,17 @@ export function Ahorros() {
         onAction={() => setModalOpen(true)}
       />
 
-      <div className="grid gap-3 md:grid-cols-2">
-        {ahorros.length === 0 ? (
-          <p className="section__empty">Todavía no tenés metas de ahorro.</p>
+      <div className="grid gap-3 md:grid-cols-2" aria-busy={isLoading}>
+        {isLoading ? (
+          <ListSkeleton className="contents" count={2} />
+        ) : ahorros.length === 0 ? (
+          <EmptyState
+            icon={<PiggyIcon size={24} />}
+            title="Todavía no tenés metas de ahorro"
+            text="Creá una meta y empezá a guardar para lo que más querés."
+            actionLabel="Crear meta"
+            onAction={() => setModalOpen(true)}
+          />
         ) : (
           ahorros.map((ahorro) => (
             <AhorroCard
@@ -53,15 +64,22 @@ export function Ahorros() {
         )}
       </div>
 
-      <ModalAhorro open={modalOpen} onClose={() => setModalOpen(false)} onSave={(data) => createAhorro.mutate(data)} />
+      <ModalAhorro
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={(data) => createAhorro.mutateAsync(data)}
+        submitting={createAhorro.isPending}
+      />
 
       <ModalAporte
         open={toAportar !== null}
         nombre={toAportar?.nombre ?? ''}
         onClose={() => setToAportar(null)}
         onSave={(monto) => {
-          if (toAportar) aportar.mutate({ id: toAportar.id, monto });
+          if (!toAportar) return Promise.resolve();
+          return aportar.mutateAsync({ id: toAportar.id, monto });
         }}
+        submitting={aportar.isPending}
       />
 
       <ConfirmDialog

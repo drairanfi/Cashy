@@ -111,7 +111,7 @@ export function ModalMeta({ open, onClose, meta }: ModalMetaProps) {
               </span>
             </label>
             {error && <p className="form-field__error">{(error as Error).message}</p>}
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} aria-busy={isPending}>
               {isPending ? 'Guardando...' : 'Guardar'}
             </Button>
             {isEdit && (
