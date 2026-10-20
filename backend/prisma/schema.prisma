@@ -21,6 +21,7 @@ model Usuario {
   comidas   Comida[]
   gimnasio  Gimnasio[]
   ahorros   Ahorro[]
+  deudas    Deuda[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -122,4 +123,35 @@ model Ahorro {
   updatedAt DateTime @updatedAt
 
   @@index([usuarioId])
+}
+
+model Deuda {
+  id             String   @id @default(uuid())
+  usuarioId      String
+  nombre         String
+  direccion      String
+  montoTotal     Decimal  @db.Decimal(12, 2)
+  cantidadCuotas Int
+  frecuencia     String
+  primeraFecha   DateTime
+  cuotas         Cuota[]
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([usuarioId])
+}
+
+model Cuota {
+  id               String   @id @default(uuid())
+  deudaId          String
+  numero           Int
+  fechaVencimiento DateTime
+  monto            Decimal  @db.Decimal(12, 2)
+  estado           String   @default("pendiente")
+  deuda            Deuda    @relation(fields: [deudaId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+
+  @@unique([deudaId, numero])
+  @@index([deudaId])
 }
