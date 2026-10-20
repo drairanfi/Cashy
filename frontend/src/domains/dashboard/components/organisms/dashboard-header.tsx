@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, PiggyBank } from 'lucide-react';
+import { ArrowDown, ArrowUp, Bell, PiggyBank } from 'lucide-react';
 
 import { StatCard } from '@/components/molecules/stat-card';
 import { cn } from '@/lib/utils';
@@ -26,6 +26,8 @@ interface DashboardHeaderProps {
   ingresos: number;
   gastos: number;
   ahorros: number;
+  hasNotifications?: boolean;
+  onOpenNotifications?: () => void;
 }
 
 export function DashboardHeader({
@@ -34,7 +36,9 @@ export function DashboardHeader({
   sueldo,
   ingresos,
   gastos,
-  ahorros
+  ahorros,
+  hasNotifications = false,
+  onOpenNotifications
 }: DashboardHeaderProps) {
   const { state, percentage } = getSaldoState(saldoDisponible, sueldo);
   const initial = nombre.charAt(0).toUpperCase();
@@ -46,9 +50,22 @@ export function DashboardHeader({
           <p className="text-sm text-muted-foreground">{dashboardMessages.greeting}</p>
           <h1 className="text-2xl font-extrabold text-foreground">{nombre}</h1>
         </div>
-        <span className="grid size-10 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-          {initial}
-        </span>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onOpenNotifications}
+            aria-label={dashboardMessages.notifications.label}
+            className="relative grid size-10 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <Bell className="size-5" />
+            {hasNotifications && (
+              <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500" />
+            )}
+          </button>
+          <span className="grid size-10 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+            {initial}
+          </span>
+        </div>
       </div>
 
       <div className={cn('rounded-3xl border p-5', STATE_CARD_CLASSES[state])}>

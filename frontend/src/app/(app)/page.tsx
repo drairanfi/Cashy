@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { Skeleton } from '@/components/atoms/skeleton';
 import { Button } from '@/components/ui/button';
+import { InsightsPanel } from '@/domains/ai/components/organisms/insights-panel';
+import { useInsights } from '@/domains/ai/hooks/use-insights';
 import { DashboardHeader } from '@/domains/dashboard/components/organisms/dashboard-header';
 import { QuickRegister } from '@/domains/dashboard/components/organisms/quick-register';
 import { RecentMovements } from '@/domains/dashboard/components/organisms/recent-movements';
@@ -26,10 +28,13 @@ export default function DashboardPage() {
   const { data: summary, isLoading } = useDashboard();
   const { data: servicios = [] } = useServicios();
   const { data: metas = [] } = useMetas();
+  const { data: insights } = useInsights();
 
   const [isSueldoModalOpen, setIsSueldoModalOpen] = useState(false);
   const [isMetaModalOpen, setIsMetaModalOpen] = useState(false);
   const [isServicioModalOpen, setIsServicioModalOpen] = useState(false);
+  const [isInsightsOpen, setIsInsightsOpen] = useState(false);
+  const [hasSeenInsights, setHasSeenInsights] = useState(false);
   const [editingMeta, setEditingMeta] = useState<Meta | null>(null);
   const [editingServicio, setEditingServicio] = useState<Servicio | null>(null);
 
@@ -66,6 +71,11 @@ export default function DashboardPage() {
         ingresos={summary.ingresos}
         gastos={summary.gastos}
         ahorros={summary.ahorros}
+        hasNotifications={!hasSeenInsights && (insights?.insights.length ?? 0) > 0}
+        onOpenNotifications={() => {
+          setHasSeenInsights(true);
+          setIsInsightsOpen(true);
+        }}
       />
 
       {summary.sueldo === 0 ? (
@@ -122,6 +132,8 @@ export default function DashboardPage() {
         onClose={() => setIsServicioModalOpen(false)}
         servicio={editingServicio}
       />
+
+      <InsightsPanel open={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />
     </div>
   );
 }

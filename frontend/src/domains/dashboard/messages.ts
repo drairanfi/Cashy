@@ -8,6 +8,9 @@ export const dashboardMessages = {
     expenses: 'Gastos',
     savings: 'Ahorros'
   },
+  notifications: {
+    label: 'Notificaciones'
+  },
   quickRegister: {
     title: 'Registro rápido',
     action: 'Registrar',

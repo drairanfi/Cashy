@@ -17,6 +17,7 @@ import type { ReactNode } from 'react';
 
 import { commonMessages } from '@/config/messages';
 import { siteConfig } from '@/config/site';
+import { ChatAssistant } from '@/domains/ai/components/organisms/chat-assistant';
 import { clearSession } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
 import { useSessionStore } from '@/store/session.store';
@@ -128,6 +129,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {children}
         </div>
       </main>
+
+      <ChatAssistant />
 
       <nav
         aria-label="Navegación principal"
