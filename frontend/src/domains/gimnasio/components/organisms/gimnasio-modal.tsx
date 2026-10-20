@@ -10,6 +10,7 @@ import { ModalHeader } from '@/components/molecules/modal-header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { commonMessages } from '@/config/messages';
+import { CuentaSelectField } from '@/domains/cuentas/components/molecules/cuenta-select';
 
 import { gimnasioSchema, type GimnasioInput } from '../../gimnasio.schema';
 import { useCreateGimnasio } from '../../hooks/use-gimnasio';
@@ -26,13 +27,17 @@ export function GimnasioModal({ open, onClose, onCreated }: GimnasioModalProps) 
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<GimnasioInput>({ resolver: zodResolver(gimnasioSchema) });
+  } = useForm<GimnasioInput>({
+    resolver: zodResolver(gimnasioSchema),
+    defaultValues: { cuentaId: null }
+  });
 
   useEffect(() => {
-    if (open) reset();
+    if (open) reset({ cuentaId: null });
   }, [open, reset]);
 
   const onSubmit = handleSubmit(async values => {
@@ -69,6 +74,7 @@ export function GimnasioModal({ open, onClose, onCreated }: GimnasioModalProps) 
             {...register('monto', { valueAsNumber: true })}
           />
         </FormField>
+        <CuentaSelectField control={control} name="cuentaId" />
         {createGimnasio.isError && (
           <p className="text-sm text-destructive">{(createGimnasio.error as Error).message}</p>
         )}
