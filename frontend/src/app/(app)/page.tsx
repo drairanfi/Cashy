@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { Skeleton } from '@/components/atoms/skeleton';
 import { Button } from '@/components/ui/button';
 import { DashboardHeader } from '@/domains/dashboard/components/organisms/dashboard-header';
+import { QuickRegister } from '@/domains/dashboard/components/organisms/quick-register';
+import { RecentMovements } from '@/domains/dashboard/components/organisms/recent-movements';
 import { useDashboard } from '@/domains/dashboard/hooks/use-dashboard';
 import { MetaModal } from '@/domains/metas/components/organisms/meta-modal';
 import { MetasSection } from '@/domains/metas/components/organisms/metas-section';
@@ -75,6 +77,10 @@ export default function DashboardPage() {
           </Button>
         </div>
       )}
+
+      <QuickRegister />
+
+      <RecentMovements />
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         <MetasSection
