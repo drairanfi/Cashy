@@ -6,15 +6,135 @@
       "sourceType": "autoskills-registry",
       "computedHash": "bffe3d08cfe92ebad63699f74ce29e35c19850ebfbf474c1463183cfe34d6a09"
     },
+    "claude-code-headless": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/delegate/claude-code-headless/SKILL.md",
+      "computedHash": "f9a49840e5b80fd0a37cd654930be6e766d01d535dbde49b6240df73c79719ae"
+    },
+    "domain-modeling": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/domain-modeling/SKILL.md",
+      "computedHash": "212edfbe13159b2fac54e032b4b94941bcbb01a62cd650223289128b8b2e6169"
+    },
+    "fabrica-routing": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/workflow/fabrica-routing/SKILL.md",
+      "computedHash": "962b0f7bce46fc5fccd70d3bde86ae0123343558f8e749bb41e8cba142bb6c76"
+    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "autoskills-registry",
       "computedHash": "82fb11a63fb1e35ee2469516ed02d54695f783115b1540c0e783197af4240a3a"
     },
+    "goal-prompting": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/utils/goal-prompting/SKILL.md",
+      "computedHash": "7f56008fa7a99b216210109a22dc5a1b3979511db5a9af634d643a6c5cc9ac1e"
+    },
+    "grill-me": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/grill-me/SKILL.md",
+      "computedHash": "5f948b40c506cbd2de3d12bcac9823b500600795d3e744dee65d290bc463faf3"
+    },
+    "grill-with-docs": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/grill-with-docs/SKILL.md",
+      "computedHash": "5a8628a3ad97f8e2a4095468a1cd2a46d265a137ad458fa807de570358038d06"
+    },
+    "grilling": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/grilling/SKILL.md",
+      "computedHash": "22b2063b9fac0b71e79d7f1a5229ada66e920ee0ca89197bb3838b006b273fe4"
+    },
+    "opencode-go-deepseek-flash": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/delegate/opencode-go-deepseek-flash/SKILL.md",
+      "computedHash": "d702410395c979bba16962f1743c234a9a3798cc08b67ebc14a075990e98ebf3"
+    },
+    "opencode-go-gpt-5-6-terra": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/delegate/opencode-go-gpt-5-6-terra/SKILL.md",
+      "computedHash": "5d151220dc101be77663238c9e752117a5c814ee7b44cf10f2a9ae5410a2a33d"
+    },
+    "pi-headless": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/delegate/pi-headless/SKILL.md",
+      "computedHash": "f0898932721029926fb30364ddb6f63641cdebe1fb82f39a65d790f79b3afd78"
+    },
+    "prototype": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/prototype/SKILL.md",
+      "computedHash": "ec5c35eea2c0b0cd71313929e348005ce6c2b33748da82f1ca7c5592fc81cd8a"
+    },
+    "release-authoring": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/utils/release-authoring/SKILL.md",
+      "computedHash": "d4dcc9f96127f0bda4579ddc73d62768d0360246b105549c219dcfe424bdc1c0"
+    },
     "seo": {
       "source": "addyosmani/web-quality-skills",
       "sourceType": "autoskills-registry",
       "computedHash": "c184da724d1c61ad077f27418ea8e7e88fd54bcdf98165e18be7e4681cbd5e20"
+    },
+    "setup-fabrica": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/workflow/setup-fabrica/SKILL.md",
+      "computedHash": "887174919a9f955fa424679631f14153f0d6f6259ea1ea9999b444c3f9c4c200"
+    },
+    "setup-ideation": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/workflow/setup-ideation/SKILL.md",
+      "computedHash": "cf69342e1fae08f65e11118e67e3c89514a254e79483f6b0a93c14c3af4d3d56"
+    },
+    "to-spec": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/to-spec/SKILL.md",
+      "computedHash": "d42916fbbd91a2b9a7a47d02371dc674e434bb550a072bf821068e20b91b8512"
+    },
+    "to-tickets": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/ideation/to-tickets/SKILL.md",
+      "computedHash": "c76354f2d311225900ed32b9cf208ff281b6fbe0f3afd6fb80155d81aa3fc2f4"
+    },
+    "user-flow-browser-qa": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/qa/user-flow-browser-qa/SKILL.md",
+      "computedHash": "f84ed9a3cc6a3e84d982b311e61b6f8602b4a2acbc7f18fb09c03f25e7509a26"
+    },
+    "visual-baseline-setup": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/qa/visual-baseline-setup/SKILL.md",
+      "computedHash": "8b42a67278cd3eb49d3143e53a0daf7811ee9e699c5c687ca66f2536f237b846"
+    },
+    "visual-qa-evaluation": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/qa/visual-qa-evaluation/SKILL.md",
+      "computedHash": "c6d7efab66a9366aff3098a248c8821e1a619f57025616fa698cfca05d4fa50f"
+    },
+    "workflow-fabrica": {
+      "source": "drairanfi/fabric-skill",
+      "sourceType": "github",
+      "skillPath": "skills/workflow/workflow-fabrica/SKILL.md",
+      "computedHash": "8656e1d274ed85db0367707c9212502dd413237c2546bd4828456b8cd71ef01b"
     }
   }
 }
