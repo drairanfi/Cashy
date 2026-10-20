@@ -11,7 +11,7 @@ export type ChatActionStatus = 'pending' | 'executing' | 'done' | 'cancelled';
 const STATUS_CLASSES: Record<ChatActionStatus, string> = {
   pending: '',
   executing: 'text-muted-foreground',
-  done: 'text-emerald-600',
+  done: 'text-income',
   cancelled: 'text-muted-foreground'
 };
 

@@ -8,15 +8,15 @@ import { getSaldoState, SALDO_STATE_LABELS, type SaldoState } from '@/utils/sald
 import { dashboardMessages } from '../../messages';
 
 const STATE_CARD_CLASSES: Record<SaldoState, string> = {
-  danger: 'border-rose-200 bg-rose-50',
-  warning: 'border-amber-200 bg-amber-50',
-  success: 'border-emerald-200 bg-emerald-50'
+  danger: 'border-expense/30 bg-expense/10',
+  warning: 'border-warning/30 bg-warning/10',
+  success: 'border-income/30 bg-income/10'
 };
 
 const STATE_DOT_CLASSES: Record<SaldoState, string> = {
-  danger: 'bg-rose-500',
-  warning: 'bg-amber-500',
-  success: 'bg-emerald-500'
+  danger: 'bg-expense',
+  warning: 'bg-warning',
+  success: 'bg-income'
 };
 
 interface DashboardHeaderProps {
@@ -59,7 +59,7 @@ export function DashboardHeader({
           >
             <Bell className="size-5" />
             {hasNotifications && (
-              <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500" />
+              <span className="absolute right-2 top-2 size-2 rounded-full bg-expense" />
             )}
           </button>
           <span className="grid size-10 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">

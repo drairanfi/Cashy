@@ -52,7 +52,7 @@ export function CuentaCard({ cuenta, onEdit, onDelete }: CuentaCardProps) {
         <span
           className={cn(
             'text-lg font-semibold',
-            isNegative ? 'text-rose-600' : 'text-emerald-600'
+            isNegative ? 'text-expense' : 'text-income'
           )}
         >
           {formatCurrency(cuenta.balance)}

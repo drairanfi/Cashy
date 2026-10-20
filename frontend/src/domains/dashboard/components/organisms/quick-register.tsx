@@ -40,7 +40,7 @@ export function QuickRegister() {
           {dashboardMessages.quickRegister.title}
         </h2>
         {feedback && (
-          <span role="status" className="text-sm font-medium text-emerald-600">
+          <span role="status" className="text-sm font-medium text-income">
             {feedback}
           </span>
         )}

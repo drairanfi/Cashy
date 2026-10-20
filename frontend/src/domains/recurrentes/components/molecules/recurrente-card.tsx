@@ -63,8 +63,8 @@ export function RecurrenteCard({ recurrente, onToggleEstado, onDelete }: Recurre
           className={cn(
             'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium transition-colors',
             isPaused
-              ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
-              : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+              ? 'bg-income/10 text-income hover:bg-income/20'
+              : 'bg-warning/10 text-warning hover:bg-warning/20'
           )}
         >
           {isPaused ? <Play className="size-3.5" /> : <Pause className="size-3.5" />}

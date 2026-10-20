@@ -6,9 +6,9 @@ import { formatCurrency } from '@/utils/format.util';
 export type StatTone = 'emerald' | 'rose' | 'sky';
 
 const TONE_CLASSES: Record<StatTone, string> = {
-  emerald: 'bg-emerald-100 text-emerald-600',
-  rose: 'bg-rose-100 text-rose-600',
-  sky: 'bg-sky-100 text-sky-600'
+  emerald: 'bg-income/10 text-income',
+  rose: 'bg-expense/10 text-expense',
+  sky: 'bg-info/10 text-info'
 };
 
 interface StatCardProps {

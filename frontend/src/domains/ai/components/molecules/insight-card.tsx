@@ -11,8 +11,8 @@ const TONE_BY_TIPO: Record<InsightTipo, BadgeTone> = {
 };
 
 const CARD_CLASSES: Record<InsightTipo, string> = {
-  alerta: 'border-rose-200 bg-rose-50',
-  sugerencia: 'border-amber-200 bg-amber-50',
+  alerta: 'border-expense/30 bg-expense/10',
+  sugerencia: 'border-warning/30 bg-warning/10',
   info: 'border-border bg-card'
 };
 
