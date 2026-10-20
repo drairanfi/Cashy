@@ -8,6 +8,7 @@ function toDTO(comida: Comida) {
     id: comida.id,
     descripcion: comida.descripcion,
     monto: comida.monto.toNumber(),
+    cuentaId: comida.cuentaId,
     fecha: comida.fecha.toISOString(),
   };
 }

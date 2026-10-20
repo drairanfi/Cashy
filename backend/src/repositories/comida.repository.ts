@@ -1,8 +1,10 @@
 import { prisma } from '../config/prisma.js';
 
 export const comidaRepository = {
-  create: (usuarioId: string, data: { descripcion: string; monto: number }) =>
-    prisma.comida.create({ data: { usuarioId, ...data } }),
+  create: (
+    usuarioId: string,
+    data: { descripcion: string; monto: number; cuentaId?: string | null },
+  ) => prisma.comida.create({ data: { usuarioId, ...data } }),
 
   findByUsuario: (usuarioId: string) =>
     prisma.comida.findMany({ where: { usuarioId }, orderBy: { fecha: 'desc' } }),

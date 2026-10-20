@@ -9,21 +9,23 @@ datasource db {
 }
 
 model Usuario {
-  id        String     @id @default(uuid())
-  email     String     @unique
-  password  String
-  nombre    String
-  sueldo    Sueldo?
-  servicios Servicio[]
-  metas     Meta[]
-  gastos    Gasto[]
-  categorias Categoria[]
-  comidas   Comida[]
-  gimnasio  Gimnasio[]
-  ahorros   Ahorro[]
-  deudas    Deuda[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id          String            @id @default(uuid())
+  email       String            @unique
+  password    String
+  nombre      String
+  sueldo      Sueldo?
+  servicios   Servicio[]
+  metas       Meta[]
+  gastos      Gasto[]
+  categorias  Categoria[]
+  comidas     Comida[]
+  gimnasio    Gimnasio[]
+  ahorros     Ahorro[]
+  deudas      Deuda[]
+  recurrentes ReglaRecurrente[]
+  cuentas     Cuenta[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
 model Sueldo {
@@ -67,12 +69,14 @@ model Gasto {
   descripcion String
   monto       Decimal  @db.Decimal(12, 2)
   categoria   String
+  cuentaId    String?
   fecha       DateTime @default(now())
   usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([usuarioId])
+  @@index([cuentaId])
 }
 
 model Categoria {
@@ -91,12 +95,14 @@ model Comida {
   usuarioId   String
   descripcion String
   monto       Decimal  @db.Decimal(12, 2)
+  cuentaId    String?
   fecha       DateTime @default(now())
   usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([usuarioId])
+  @@index([cuentaId])
 }
 
 model Gimnasio {
@@ -104,12 +110,14 @@ model Gimnasio {
   usuarioId String
   actividad String
   monto     Decimal  @db.Decimal(12, 2)
+  cuentaId  String?
   fecha     DateTime @default(now())
   usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([usuarioId])
+  @@index([cuentaId])
 }
 
 model Ahorro {
@@ -154,4 +162,48 @@ model Cuota {
 
   @@unique([deudaId, numero])
   @@index([deudaId])
+}
+
+model ReglaRecurrente {
+  id          String       @id @default(uuid())
+  usuarioId   String
+  concepto    String
+  monto       Decimal      @db.Decimal(12, 2)
+  categoria   String?
+  frecuencia  String
+  intervalo   Int          @default(1)
+  fechaInicio DateTime
+  fechaFin    DateTime?
+  estado      String       @default("activa")
+  ocurrencias Ocurrencia[]
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([usuarioId])
+}
+
+model Ocurrencia {
+  id        String          @id @default(uuid())
+  reglaId   String
+  fecha     DateTime
+  estado    String          @default("pendiente")
+  regla     ReglaRecurrente @relation(fields: [reglaId], references: [id], onDelete: Cascade)
+  createdAt DateTime        @default(now())
+
+  @@unique([reglaId, fecha])
+  @@index([reglaId])
+}
+
+model Cuenta {
+  id           String   @id @default(uuid())
+  usuarioId    String
+  nombre       String
+  tipo         String
+  saldoInicial Decimal  @db.Decimal(12, 2) @default(0)
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([usuarioId])
 }

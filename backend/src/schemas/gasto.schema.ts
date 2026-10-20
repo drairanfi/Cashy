@@ -6,6 +6,7 @@ export const createGastoSchema = z.object({
   descripcion: z.string().min(2).max(100),
   monto: z.number().positive(),
   categoria: z.string().trim().min(1).max(30),
+  cuentaId: z.string().trim().min(1).nullable().optional(),
 });
 
 export type CreateGastoInput = z.infer<typeof createGastoSchema>;

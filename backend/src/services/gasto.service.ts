@@ -9,6 +9,7 @@ function toDTO(gasto: Gasto) {
     descripcion: gasto.descripcion,
     monto: gasto.monto.toNumber(),
     categoria: gasto.categoria,
+    cuentaId: gasto.cuentaId,
     fecha: gasto.fecha.toISOString(),
   };
 }

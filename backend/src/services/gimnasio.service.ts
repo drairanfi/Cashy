@@ -8,6 +8,7 @@ function toDTO(registro: Gimnasio) {
     id: registro.id,
     actividad: registro.actividad,
     monto: registro.monto.toNumber(),
+    cuentaId: registro.cuentaId,
     fecha: registro.fecha.toISOString(),
   };
 }

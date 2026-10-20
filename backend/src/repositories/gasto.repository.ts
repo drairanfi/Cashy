@@ -1,8 +1,10 @@
 import { prisma } from '../config/prisma.js';
 
 export const gastoRepository = {
-  create: (usuarioId: string, data: { descripcion: string; monto: number; categoria: string }) =>
-    prisma.gasto.create({ data: { usuarioId, ...data } }),
+  create: (
+    usuarioId: string,
+    data: { descripcion: string; monto: number; categoria: string; cuentaId?: string | null },
+  ) => prisma.gasto.create({ data: { usuarioId, ...data } }),
 
   findByUsuario: (usuarioId: string) =>
     prisma.gasto.findMany({ where: { usuarioId }, orderBy: { fecha: 'desc' } }),
