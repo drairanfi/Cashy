@@ -4,5 +4,5 @@ export const siteConfig = {
 } as const;
 
 export const apiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4001/api'
+  baseUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api'
 } as const;
