@@ -24,6 +24,10 @@ export const commonMessages = {
     error: 'Algo salió mal',
     empty: 'Sin datos'
   },
+  more: {
+    accountTitle: 'Cuenta',
+    sessionTitle: 'Sesión'
+  },
   underConstruction: {
     title: 'En construcción',
     text: 'Estamos trabajando en esta sección. Va a estar disponible pronto.'
