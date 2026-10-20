@@ -7,7 +7,8 @@ export const gastoSchema = z.object({
   monto: z
     .number({ error: messages.amountRequired })
     .positive({ error: messages.amountPositive }),
-  categoria: z.string().min(1, { error: messages.categoryRequired })
+  categoria: z.string().min(1, { error: messages.categoryRequired }),
+  cuentaId: z.string().nullable().optional()
 });
 
 export type GastoInput = z.infer<typeof gastoSchema>;

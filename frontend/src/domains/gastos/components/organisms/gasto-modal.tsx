@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/select';
 import { commonMessages } from '@/config/messages';
 import { useCategorias } from '@/domains/categorias/hooks/use-categorias';
+import { CuentaSelectField } from '@/domains/cuentas/components/molecules/cuenta-select';
 
 import { DEFAULT_GASTO_CATEGORIAS } from '../../constants';
 import { gastoSchema, type GastoInput } from '../../gasto.schema';
@@ -47,11 +48,11 @@ export function GastoModal({ open, onClose, onCreated }: GastoModalProps) {
     formState: { errors }
   } = useForm<GastoInput>({
     resolver: zodResolver(gastoSchema),
-    defaultValues: { categoria: DEFAULT_GASTO_CATEGORIAS[0] }
+    defaultValues: { categoria: DEFAULT_GASTO_CATEGORIAS[0], cuentaId: null }
   });
 
   useEffect(() => {
-    if (open) reset({ categoria: DEFAULT_GASTO_CATEGORIAS[0] });
+    if (open) reset({ categoria: DEFAULT_GASTO_CATEGORIAS[0], cuentaId: null });
   }, [open, reset]);
 
   const onSubmit = handleSubmit(async values => {
@@ -111,6 +112,7 @@ export function GastoModal({ open, onClose, onCreated }: GastoModalProps) {
             )}
           />
         </FormField>
+        <CuentaSelectField control={control} name="cuentaId" />
         {createGasto.isError && (
           <p className="text-sm text-destructive">{(createGasto.error as Error).message}</p>
         )}

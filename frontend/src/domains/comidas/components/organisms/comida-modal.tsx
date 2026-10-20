@@ -10,6 +10,7 @@ import { ModalHeader } from '@/components/molecules/modal-header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { commonMessages } from '@/config/messages';
+import { CuentaSelectField } from '@/domains/cuentas/components/molecules/cuenta-select';
 
 import { comidaSchema, type ComidaInput } from '../../comida.schema';
 import { useCreateComida } from '../../hooks/use-comidas';
@@ -26,13 +27,14 @@ export function ComidaModal({ open, onClose, onCreated }: ComidaModalProps) {
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<ComidaInput>({ resolver: zodResolver(comidaSchema) });
+  } = useForm<ComidaInput>({ resolver: zodResolver(comidaSchema), defaultValues: { cuentaId: null } });
 
   useEffect(() => {
-    if (open) reset();
+    if (open) reset({ cuentaId: null });
   }, [open, reset]);
 
   const onSubmit = handleSubmit(async values => {
@@ -69,6 +71,7 @@ export function ComidaModal({ open, onClose, onCreated }: ComidaModalProps) {
             {...register('monto', { valueAsNumber: true })}
           />
         </FormField>
+        <CuentaSelectField control={control} name="cuentaId" />
         {createComida.isError && (
           <p className="text-sm text-destructive">{(createComida.error as Error).message}</p>
         )}
