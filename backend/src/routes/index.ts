@@ -11,6 +11,8 @@ import { comidaRouter } from './comida.routes.js';
 import { gimnasioRouter } from './gimnasio.routes.js';
 import { ahorroRouter } from './ahorro.routes.js';
 import { deudaRouter } from './deuda.routes.js';
+import { recurrenteRouter } from './recurrente.routes.js';
+import { cuentaRouter } from './cuenta.routes.js';
 
 export const apiRouter = Router();
 
@@ -26,3 +28,5 @@ apiRouter.use('/comidas', comidaRouter);
 apiRouter.use('/gimnasio', gimnasioRouter);
 apiRouter.use('/ahorros', ahorroRouter);
 apiRouter.use('/deudas', deudaRouter);
+apiRouter.use('/recurrentes', recurrenteRouter);
+apiRouter.use('/cuentas', cuentaRouter);
