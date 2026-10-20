@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 export type BadgeTone = 'danger' | 'warning' | 'success' | 'neutral';
 
 const TONE_CLASSES: Record<BadgeTone, string> = {
-  danger: 'bg-rose-100 text-rose-700',
-  warning: 'bg-amber-100 text-amber-700',
-  success: 'bg-emerald-100 text-emerald-700',
+  danger: 'bg-expense/10 text-expense',
+  warning: 'bg-warning/10 text-warning',
+  success: 'bg-income/10 text-income',
   neutral: 'bg-muted text-muted-foreground'
 };
 
