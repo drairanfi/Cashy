@@ -16,6 +16,7 @@ export const commonMessages = {
     food: 'Comida',
     gym: 'Gimnasio',
     savings: 'Ahorros',
+    debts: 'Deudas',
     categories: 'Categorías',
     more: 'Más'
   },

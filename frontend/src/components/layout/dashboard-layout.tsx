@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  CreditCard,
   Dumbbell,
   Home,
   LogOut,
@@ -38,6 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: commonMessages.navigation.food, href: '/comida', icon: UtensilsCrossed },
   { label: commonMessages.navigation.gym, href: '/gimnasio', icon: Dumbbell },
   { label: commonMessages.navigation.savings, href: '/ahorros', icon: PiggyBank },
+  { label: commonMessages.navigation.debts, href: '/deudas', icon: CreditCard },
   { label: commonMessages.navigation.categories, href: '/categorias', icon: Tag },
   { label: commonMessages.navigation.more, href: '/mas', icon: MoreHorizontal }
 ];
@@ -134,7 +136,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       <nav
         aria-label="Navegación principal"
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-7 border-t border-border bg-card lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-8 border-t border-border bg-card lg:hidden"
       >
         {NAV_ITEMS.map(item => {
           const isActive = isItemActive(pathname, item.href);
