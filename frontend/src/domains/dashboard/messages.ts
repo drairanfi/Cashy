@@ -3,6 +3,10 @@ export const dashboardMessages = {
   saldoLabel: 'Saldo disponible',
   saldoCurrency: 'Pesos colombianos (COP)',
   saldoPercentage: (percentage: number) => `${percentage}% del sueldo`,
+  cuentaPercentage: (percentage: number) => `${percentage}% de lo asignado`,
+  dinero: {
+    total: 'Total'
+  },
   stats: {
     income: 'Ingresos',
     expenses: 'Gastos',

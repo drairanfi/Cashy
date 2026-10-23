@@ -1,5 +1,7 @@
+import { Pencil } from 'lucide-react';
+
 import { Badge } from '@/components/atoms/badge';
-import { cn } from '@/lib/utils';
+import { IconAction } from '@/components/molecules/icon-action';
 import type { Meta } from '@/types/meta.types';
 import { formatCurrency } from '@/utils/format.util';
 
@@ -12,40 +14,35 @@ interface MetaCardProps {
 
 export function MetaCard({ meta, onEdit }: MetaCardProps) {
   return (
-    <div
-      className={cn(
-        'rounded-2xl border p-4',
-        meta.prioritaria ? 'border-primary/40 bg-primary/5' : 'border-border bg-card'
-      )}
-    >
+    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="truncate font-medium text-foreground">{meta.nombre}</p>
           {meta.prioritaria && (
-            <Badge tone="success" className="mt-1">
+            <Badge tone="neutral" className="mt-1">
               {metasMessages.card.bigBadge}
             </Badge>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => onEdit(meta)}
-          className="shrink-0 text-sm font-medium text-primary hover:underline"
-        >
-          {metasMessages.card.edit}
-        </button>
+        <IconAction label={metasMessages.card.edit} icon={Pencil} onClick={() => onEdit(meta)} />
       </div>
-      <p className="mt-2 text-lg font-semibold text-foreground">
-        {formatCurrency(meta.montoObjetivo)}
-      </p>
-      <p className="text-sm text-muted-foreground">
-        {metasMessages.card.perMonth(formatCurrency(meta.montoMensual))}
-      </p>
-      {meta.mesesParaAlcanzar !== null && (
-        <p className="mt-1 text-xs text-muted-foreground">
-          {metasMessages.card.monthsToReach(meta.mesesParaAlcanzar)}
+      <div>
+        <p className="text-lg font-semibold text-foreground">{formatCurrency(meta.montoObjetivo)}</p>
+        <p className="text-sm text-muted-foreground">
+          {metasMessages.card.perMonth(formatCurrency(meta.montoMensual))}
         </p>
-      )}
+        <p className="mt-1 text-xs text-muted-foreground">
+          {metasMessages.card.range(
+            new Date(meta.fechaInicio).toLocaleDateString('es-CO'),
+            meta.fechaFin ? new Date(meta.fechaFin).toLocaleDateString('es-CO') : null
+          )}
+        </p>
+        {meta.mesesParaAlcanzar !== null && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {metasMessages.card.monthsToReach(meta.mesesParaAlcanzar)}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

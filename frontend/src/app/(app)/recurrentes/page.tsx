@@ -1,5 +1,7 @@
 'use client';
 
+import { ModuloVisibilidadToggle } from '@/domains/modulos/components/organisms/modulo-visibilidad-toggle';
+
 import { useState } from 'react';
 
 import { ConfirmDialog } from '@/components/molecules/confirm-dialog';
@@ -52,6 +54,9 @@ export default function RecurrentesPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <ModuloVisibilidadToggle clave="recurrentes" />
+      </div>
       <RecurrentesSection
         recurrentes={recurrentes}
         isLoading={isLoading}

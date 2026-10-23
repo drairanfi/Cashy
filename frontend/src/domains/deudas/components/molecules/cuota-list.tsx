@@ -36,7 +36,7 @@ export function CuotaList({ cuotas, isPaying, onPagar }: CuotaListProps) {
             <div className="flex shrink-0 items-center gap-2">
               <span className="text-sm text-foreground">{formatCurrency(cuota.monto)}</span>
               {isPaid ? (
-                <Badge tone="success">{deudasMessages.cuota.paid}</Badge>
+                <Badge tone="neutral">{deudasMessages.cuota.paid}</Badge>
               ) : (
                 <Button
                   size="sm"

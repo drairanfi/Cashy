@@ -2,6 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import type { UpdateGastoPayload } from '@/types/gasto.types';
+
 import { gastosApi } from '../api';
 
 export function useGastos() {
@@ -24,6 +26,16 @@ export function useCreateGasto() {
 
   return useMutation({
     mutationFn: gastosApi.create,
+    onSuccess: invalidate
+  });
+}
+
+export function useUpdateGasto() {
+  const invalidate = useInvalidateGastos();
+
+  return useMutation({
+    mutationFn: (input: { id: string; data: UpdateGastoPayload }) =>
+      gastosApi.update(input.id, input.data),
     onSuccess: invalidate
   });
 }

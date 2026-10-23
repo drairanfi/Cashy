@@ -1,7 +1,7 @@
 import type { Gasto } from '@prisma/client';
 import { gastoRepository } from '../repositories/gasto.repository.js';
 import { HttpError } from '../utils/httpError.js';
-import type { CreateGastoInput } from '../schemas/gasto.schema.js';
+import type { CreateGastoInput, UpdateGastoInput } from '../schemas/gasto.schema.js';
 
 function toDTO(gasto: Gasto) {
   return {
@@ -22,6 +22,16 @@ export async function listGastosUseCase(usuarioId: string) {
 export async function createGastoUseCase(usuarioId: string, data: CreateGastoInput) {
   const gasto = await gastoRepository.create(usuarioId, data);
   return toDTO(gasto);
+}
+
+export async function updateGastoUseCase(usuarioId: string, id: string, data: UpdateGastoInput) {
+  const gasto = await gastoRepository.findById(id);
+  if (!gasto || gasto.usuarioId !== usuarioId) {
+    throw new HttpError(404, 'Gasto no encontrado');
+  }
+
+  const actualizado = await gastoRepository.update(id, data);
+  return toDTO(actualizado);
 }
 
 export async function deleteGastoUseCase(usuarioId: string, id: string) {

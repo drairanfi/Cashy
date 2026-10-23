@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import {
   listCategoriasUseCase,
   createCategoriaUseCase,
+  renameCategoriaUseCase,
   deleteCategoriaUseCase,
 } from '../services/categoria.service.js';
 
@@ -18,6 +19,15 @@ export async function createCategoria(req: Request, res: Response, next: NextFun
   try {
     const categoria = await createCategoriaUseCase(req.user.id, req.body);
     res.status(201).json(categoria);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function renameCategoria(req: Request, res: Response, next: NextFunction) {
+  try {
+    const categoria = await renameCategoriaUseCase(req.user.id, req.params.id, req.body.nombre);
+    res.json(categoria);
   } catch (err) {
     next(err);
   }

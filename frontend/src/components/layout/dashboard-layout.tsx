@@ -1,17 +1,12 @@
 'use client';
 
 import {
-  CreditCard,
-  Dumbbell,
+  Boxes,
   Home,
   Landmark,
   LogOut,
   MoreHorizontal,
-  PiggyBank,
-  Repeat,
-  Tag,
-  UtensilsCrossed,
-  Wallet,
+  Settings,
   type LucideIcon
 } from 'lucide-react';
 import Link from 'next/link';
@@ -21,6 +16,9 @@ import type { ReactNode } from 'react';
 import { commonMessages } from '@/config/messages';
 import { siteConfig } from '@/config/site';
 import { ChatAssistant } from '@/domains/ai/components/organisms/chat-assistant';
+import { MODULOS_OPCIONALES } from '@/domains/modulos/config';
+import { modulosMessages } from '@/domains/modulos/messages';
+import { useModulos, useModulosPersonalizados } from '@/domains/modulos/hooks/use-modulos';
 import { clearSession } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
 import { useSessionStore } from '@/store/session.store';
@@ -35,17 +33,16 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { label: commonMessages.navigation.home, href: '/', icon: Home },
-  { label: commonMessages.navigation.expenses, href: '/gastos', icon: Wallet },
-  { label: commonMessages.navigation.food, href: '/comida', icon: UtensilsCrossed },
-  { label: commonMessages.navigation.gym, href: '/gimnasio', icon: Dumbbell },
-  { label: commonMessages.navigation.savings, href: '/ahorros', icon: PiggyBank },
-  { label: commonMessages.navigation.recurring, href: '/recurrentes', icon: Repeat },
-  { label: commonMessages.navigation.accounts, href: '/cuentas', icon: Landmark },
-  { label: commonMessages.navigation.debts, href: '/deudas', icon: CreditCard },
-  { label: commonMessages.navigation.categories, href: '/categorias', icon: Tag },
-  { label: commonMessages.navigation.more, href: '/mas', icon: MoreHorizontal }
+const HOME_ITEM: NavItem = { label: commonMessages.navigation.home, href: '/', icon: Home };
+
+const CONFIG_ITEMS: NavItem[] = [
+  { label: commonMessages.navigation.settings, href: '/configuracion', icon: Settings },
+  { label: commonMessages.navigation.profile, href: '/perfil', icon: MoreHorizontal }
+];
+
+const SETTINGS_SUB_ITEMS: NavItem[] = [
+  { label: modulosMessages.tabs.modules, href: '/configuracion/modulos', icon: Boxes },
+  { label: modulosMessages.tabs.accounts, href: '/configuracion/cuentas', icon: Landmark }
 ];
 
 function isItemActive(pathname: string, href: string): boolean {
@@ -56,13 +53,54 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
   const user = useSessionStore(state => state.user);
+  const { data: modulos = [] } = useModulos();
+  const { data: modulosPersonalizados = [] } = useModulosPersonalizados();
 
   const handleLogout = () => {
     clearSession();
     router.replace('/login');
   };
 
+  const activeModuleItems: NavItem[] = MODULOS_OPCIONALES.filter(
+    definition => modulos.find(modulo => modulo.clave === definition.clave)?.activo
+  ).map(definition => ({ label: definition.label, href: definition.href, icon: definition.icon }));
+
+  const customModuleItems: NavItem[] = modulosPersonalizados
+    .filter(modulo => modulo.activo)
+    .map(modulo => ({ label: modulo.nombre, href: `/modulos/${modulo.id}`, icon: Boxes }));
+
+  const mainItems = [HOME_ITEM, ...activeModuleItems, ...customModuleItems];
+
+  const isConfigActive = pathname.startsWith('/configuracion');
+  const configNavItems: NavItem[] = isConfigActive
+    ? [CONFIG_ITEMS[0], ...SETTINGS_SUB_ITEMS, CONFIG_ITEMS[1]]
+    : CONFIG_ITEMS;
+
   const initial = user?.nombre.charAt(0).toUpperCase() ?? 'U';
+
+  const renderSidebarLink = (item: NavItem) => {
+    const isActive =
+      item.href === '/configuracion' ? pathname === item.href : isItemActive(pathname, item.href);
+    const isNested = SETTINGS_SUB_ITEMS.some(sub => sub.href === item.href);
+    const Icon = item.icon;
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-current={isActive ? 'page' : undefined}
+        className={cn(
+          'flex items-center gap-3 rounded-lg py-2 pr-3 text-sm font-medium transition-colors',
+          isNested ? 'pl-9' : 'pl-3',
+          isActive
+            ? 'bg-primary/10 text-primary'
+            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+        )}
+      >
+        <Icon className="size-5" />
+        {item.label}
+      </Link>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,26 +109,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {siteConfig.name}
         </div>
         <nav aria-label="Navegación principal" className="flex flex-1 flex-col gap-1 px-3 py-2">
-          {NAV_ITEMS.map(item => {
-            const isActive = isItemActive(pathname, item.href);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive ? 'page' : undefined}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                  isActive
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                )}
-              >
-                <Icon className="size-5" />
-                {item.label}
-              </Link>
-            );
-          })}
+          {mainItems.map(renderSidebarLink)}
+          <div className="mt-auto flex flex-col gap-1 border-t border-border pt-3">
+            <p className="px-3 pb-1 text-xs font-semibold uppercase text-muted-foreground">
+              {commonMessages.navigation.settings}
+            </p>
+            {configNavItems.map(renderSidebarLink)}
+          </div>
         </nav>
         <div className="flex items-center gap-3 border-t border-border p-4">
           <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
@@ -140,9 +165,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       <nav
         aria-label="Navegación principal"
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-10 border-t border-border bg-card lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 flex overflow-x-auto border-t border-border bg-card lg:hidden"
       >
-        {NAV_ITEMS.map(item => {
+        {[...mainItems, ...configNavItems].map(item => {
           const isActive = isItemActive(pathname, item.href);
           const Icon = item.icon;
           return (
@@ -151,7 +176,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               href={item.href}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'flex flex-col items-center gap-0.5 px-0.5 py-2 text-[10px] font-medium transition-colors',
+                'flex min-w-16 flex-1 flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium transition-colors',
                 isActive ? 'text-primary' : 'text-muted-foreground'
               )}
             >

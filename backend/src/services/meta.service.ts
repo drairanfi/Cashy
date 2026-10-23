@@ -19,11 +19,32 @@ export async function listMetasUseCase(usuarioId: string) {
   return metas.map(toDTO);
 }
 
+function toFechas(data: { fechaInicio?: string; fechaFin?: string | null }) {
+  return {
+    ...(data.fechaInicio !== undefined && { fechaInicio: new Date(data.fechaInicio) }),
+    ...(data.fechaFin !== undefined && {
+      fechaFin: data.fechaFin ? new Date(data.fechaFin) : null,
+    }),
+  };
+}
+
 export async function createMetaUseCase(
   usuarioId: string,
-  data: { nombre: string; montoObjetivo: number; montoMensual: number; prioritaria?: boolean },
+  data: {
+    nombre: string;
+    montoObjetivo: number;
+    montoMensual: number;
+    prioritaria?: boolean;
+    fechaInicio: string;
+    fechaFin?: string | null;
+  },
 ) {
-  const meta = await metaRepository.create(usuarioId, data);
+  const { fechaInicio, fechaFin, ...resto } = data;
+  const meta = await metaRepository.create(usuarioId, {
+    ...resto,
+    fechaInicio: new Date(fechaInicio),
+    fechaFin: fechaFin ? new Date(fechaFin) : null,
+  });
   return toDTO(meta);
 }
 
@@ -35,6 +56,8 @@ export async function updateMetaUseCase(
     montoObjetivo?: number;
     montoMensual?: number;
     prioritaria?: boolean;
+    fechaInicio?: string;
+    fechaFin?: string | null;
   },
 ) {
   const meta = await metaRepository.findById(id);
@@ -42,7 +65,8 @@ export async function updateMetaUseCase(
     throw new HttpError(404, 'Meta no encontrada');
   }
 
-  const updated = await metaRepository.update(id, data);
+  const { fechaInicio, fechaFin, ...resto } = data;
+  const updated = await metaRepository.update(id, { ...resto, ...toFechas({ fechaInicio, fechaFin }) });
   return toDTO(updated);
 }
 

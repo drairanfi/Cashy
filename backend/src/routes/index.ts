@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { authRouter } from './auth.routes.js';
 import { sueldoRouter } from './sueldo.routes.js';
-import { servicioRouter } from './servicio.routes.js';
 import { metaRouter } from './meta.routes.js';
 import { dashboardRouter } from './dashboard.routes.js';
 import { aiRouter } from './ai.routes.js';
@@ -13,12 +12,14 @@ import { ahorroRouter } from './ahorro.routes.js';
 import { deudaRouter } from './deuda.routes.js';
 import { recurrenteRouter } from './recurrente.routes.js';
 import { cuentaRouter } from './cuenta.routes.js';
+import { moduloRouter } from './modulo.routes.js';
+import { moduloPersonalizadoRouter } from './modulo-personalizado.routes.js';
+import { registroModuloPersonalizadoRouter } from './registro-modulo-personalizado.routes.js';
 
 export const apiRouter = Router();
 
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/sueldo', sueldoRouter);
-apiRouter.use('/servicios', servicioRouter);
 apiRouter.use('/metas', metaRouter);
 apiRouter.use('/dashboard', dashboardRouter);
 apiRouter.use('/ai', aiRouter);
@@ -30,3 +31,6 @@ apiRouter.use('/ahorros', ahorroRouter);
 apiRouter.use('/deudas', deudaRouter);
 apiRouter.use('/recurrentes', recurrenteRouter);
 apiRouter.use('/cuentas', cuentaRouter);
+apiRouter.use('/modulos', moduloRouter);
+apiRouter.use('/modulos-personalizados/:moduloId/registros', registroModuloPersonalizadoRouter);
+apiRouter.use('/modulos-personalizados', moduloPersonalizadoRouter);

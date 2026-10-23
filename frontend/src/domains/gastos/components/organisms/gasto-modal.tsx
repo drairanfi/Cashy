@@ -20,25 +20,31 @@ import { commonMessages } from '@/config/messages';
 import { useCategorias } from '@/domains/categorias/hooks/use-categorias';
 import { CuentaSelectField } from '@/domains/cuentas/components/molecules/cuenta-select';
 
+import type { Gasto } from '@/types/gasto.types';
+
 import { DEFAULT_GASTO_CATEGORIAS } from '../../constants';
 import { gastoSchema, type GastoInput } from '../../gasto.schema';
-import { useCreateGasto } from '../../hooks/use-gastos';
+import { useCreateGasto, useUpdateGasto } from '../../hooks/use-gastos';
 import { gastosMessages } from '../../messages';
 
 interface GastoModalProps {
   open: boolean;
   onClose: () => void;
+  gasto?: Gasto | null;
   onCreated?: () => void;
 }
 
-export function GastoModal({ open, onClose, onCreated }: GastoModalProps) {
+export function GastoModal({ open, onClose, gasto = null, onCreated }: GastoModalProps) {
+  const isEdit = gasto !== null;
   const createGasto = useCreateGasto();
+  const updateGasto = useUpdateGasto();
   const { data: categorias = [] } = useCategorias();
 
   const categoryOptions = useMemo(() => {
     const custom = categorias.map(categoria => categoria.nombre);
-    return Array.from(new Set<string>([...DEFAULT_GASTO_CATEGORIAS, ...custom]));
-  }, [categorias]);
+    const current = gasto ? [gasto.categoria] : [];
+    return Array.from(new Set<string>([...DEFAULT_GASTO_CATEGORIAS, ...custom, ...current]));
+  }, [categorias, gasto]);
 
   const {
     register,
@@ -52,13 +58,27 @@ export function GastoModal({ open, onClose, onCreated }: GastoModalProps) {
   });
 
   useEffect(() => {
-    if (open) reset({ categoria: DEFAULT_GASTO_CATEGORIAS[0], cuentaId: null });
-  }, [open, reset]);
+    if (!open) return;
+    reset(
+      gasto
+        ? {
+            descripcion: gasto.descripcion,
+            monto: gasto.monto,
+            categoria: gasto.categoria,
+            cuentaId: gasto.cuentaId
+          }
+        : { categoria: DEFAULT_GASTO_CATEGORIAS[0], cuentaId: null }
+    );
+  }, [open, gasto, reset]);
 
   const onSubmit = handleSubmit(async values => {
     try {
-      await createGasto.mutateAsync(values);
-      onCreated?.();
+      if (isEdit && gasto) {
+        await updateGasto.mutateAsync({ id: gasto.id, data: values });
+      } else {
+        await createGasto.mutateAsync(values);
+        onCreated?.();
+      }
       reset();
       onClose();
     } catch {
@@ -66,9 +86,15 @@ export function GastoModal({ open, onClose, onCreated }: GastoModalProps) {
     }
   });
 
+  const isPending = createGasto.isPending || updateGasto.isPending;
+  const error = createGasto.error ?? updateGasto.error;
+
   return (
     <Modal open={open} onClose={onClose}>
-      <ModalHeader title={gastosMessages.modal.createTitle} onClose={onClose} />
+      <ModalHeader
+        title={isEdit ? gastosMessages.modal.editTitle : gastosMessages.modal.createTitle}
+        onClose={onClose}
+      />
       <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
         <FormField
           label={gastosMessages.modal.descriptionLabel}
@@ -113,11 +139,9 @@ export function GastoModal({ open, onClose, onCreated }: GastoModalProps) {
           />
         </FormField>
         <CuentaSelectField control={control} name="cuentaId" />
-        {createGasto.isError && (
-          <p className="text-sm text-destructive">{(createGasto.error as Error).message}</p>
-        )}
-        <Button type="submit" disabled={createGasto.isPending} aria-busy={createGasto.isPending}>
-          {createGasto.isPending ? commonMessages.actions.saving : commonMessages.actions.save}
+        {error && <p className="text-sm text-destructive">{(error as Error).message}</p>}
+        <Button type="submit" disabled={isPending} aria-busy={isPending}>
+          {isPending ? commonMessages.actions.saving : commonMessages.actions.save}
         </Button>
       </form>
     </Modal>

@@ -1,5 +1,7 @@
 import type { Cuenta, Prisma } from '@prisma/client';
 import { cuentaRepository } from '../repositories/cuenta.repository.js';
+import { moduloRepository } from '../repositories/modulo.repository.js';
+import { registroModuloPersonalizadoRepository } from '../repositories/registro-modulo-personalizado.repository.js';
 import { HttpError } from '../utils/httpError.js';
 import type { CreateCuentaInput, UpdateCuentaInput } from '../schemas/cuenta.schema.js';
 
@@ -22,12 +24,14 @@ function buildSpendMap(...grupos: SumaPorCuenta[][]): Map<string, number> {
 }
 
 async function spendMapForUser(usuarioId: string) {
-  const [gastos, comidas, gimnasio] = await Promise.all([
-    cuentaRepository.sumGastosPorCuenta(usuarioId),
-    cuentaRepository.sumComidasPorCuenta(usuarioId),
-    cuentaRepository.sumGimnasioPorCuenta(usuarioId),
+  const activos = await moduloRepository.findActivoClaves(usuarioId);
+  const [gastos, comidas, gimnasio, personalizados] = await Promise.all([
+    activos.has('gastos') ? cuentaRepository.sumGastosPorCuenta(usuarioId) : [],
+    activos.has('comida') ? cuentaRepository.sumComidasPorCuenta(usuarioId) : [],
+    activos.has('gimnasio') ? cuentaRepository.sumGimnasioPorCuenta(usuarioId) : [],
+    registroModuloPersonalizadoRepository.sumPorCuentaActivos(usuarioId),
   ]);
-  return buildSpendMap(gastos, comidas, gimnasio);
+  return buildSpendMap(gastos, comidas, gimnasio, personalizados);
 }
 
 function cuentaDTO(cuenta: Cuenta, gastadoCents: number) {

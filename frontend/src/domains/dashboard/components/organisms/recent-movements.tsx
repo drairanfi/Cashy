@@ -7,6 +7,7 @@ import { ListSkeleton } from '@/components/molecules/list-skeleton';
 import { useComidas } from '@/domains/comidas/hooks/use-comidas';
 import { useGastos } from '@/domains/gastos/hooks/use-gastos';
 import { useGimnasio } from '@/domains/gimnasio/hooks/use-gimnasio';
+import { useModulos } from '@/domains/modulos/hooks/use-modulos';
 import type { Movimiento } from '@/types/movimiento.types';
 
 import { MovementRow } from '../molecules/movement-row';
@@ -18,11 +19,14 @@ export function RecentMovements() {
   const { data: gastos = [], isLoading: isLoadingGastos } = useGastos();
   const { data: comidas = [], isLoading: isLoadingComidas } = useComidas();
   const { data: gimnasio = [], isLoading: isLoadingGimnasio } = useGimnasio();
+  const { data: modulos = [], isLoading: isLoadingModulos } = useModulos();
 
-  const isLoading = isLoadingGastos || isLoadingComidas || isLoadingGimnasio;
+  const isLoading =
+    isLoadingGastos || isLoadingComidas || isLoadingGimnasio || isLoadingModulos;
+  const isActivo = (clave: string) => modulos.some(m => m.clave === clave && m.activo);
 
   const movimientos: Movimiento[] = [
-    ...gastos.map(gasto => ({
+    ...(isActivo('gastos') ? gastos : []).map(gasto => ({
       id: gasto.id,
       tipo: 'gasto' as const,
       titulo: gasto.descripcion,
@@ -30,14 +34,14 @@ export function RecentMovements() {
       fecha: gasto.fecha,
       categoria: gasto.categoria
     })),
-    ...comidas.map(comida => ({
+    ...(isActivo('comida') ? comidas : []).map(comida => ({
       id: comida.id,
       tipo: 'comida' as const,
       titulo: comida.descripcion,
       monto: comida.monto,
       fecha: comida.fecha
     })),
-    ...gimnasio.map(registro => ({
+    ...(isActivo('gimnasio') ? gimnasio : []).map(registro => ({
       id: registro.id,
       tipo: 'gimnasio' as const,
       titulo: registro.actividad,

@@ -8,10 +8,12 @@ export const gastosMessages = {
     action: 'Agregar gasto'
   },
   card: {
+    edit: 'Editar gasto',
     delete: 'Eliminar gasto'
   },
   modal: {
     createTitle: 'Agregar gasto',
+    editTitle: 'Editar gasto',
     descriptionLabel: 'Descripción',
     descriptionPlaceholder: 'Ej: Supermercado',
     amountLabel: 'Monto',

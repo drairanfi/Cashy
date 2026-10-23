@@ -25,7 +25,7 @@ export function AhorroCard({ ahorro, onContribute, onDelete }: AhorroCardProps) 
       <div className="flex items-start justify-between gap-3">
         <p className="truncate font-medium text-foreground">{ahorro.nombre}</p>
         {isCompleted ? (
-          <Badge tone="success">{ahorrosMessages.card.completed}</Badge>
+          <Badge tone="neutral">{ahorrosMessages.card.completed}</Badge>
         ) : (
           <button
             type="button"

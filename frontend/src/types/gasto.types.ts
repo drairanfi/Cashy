@@ -13,3 +13,5 @@ export interface CreateGastoPayload {
   categoria: string;
   cuentaId?: string | null;
 }
+
+export type UpdateGastoPayload = Partial<CreateGastoPayload>;

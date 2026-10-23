@@ -5,6 +5,8 @@ export interface Meta {
   montoMensual: number;
   mesesParaAlcanzar: number | null;
   prioritaria: boolean;
+  fechaInicio: string;
+  fechaFin: string | null;
 }
 
 export interface CreateMetaPayload {
@@ -12,6 +14,8 @@ export interface CreateMetaPayload {
   montoObjetivo: number;
   montoMensual: number;
   prioritaria?: boolean;
+  fechaInicio: string;
+  fechaFin?: string | null;
 }
 
 export interface UpdateMetaPayload {
@@ -19,4 +23,6 @@ export interface UpdateMetaPayload {
   montoObjetivo?: number;
   montoMensual?: number;
   prioritaria?: boolean;
+  fechaInicio?: string;
+  fechaFin?: string | null;
 }

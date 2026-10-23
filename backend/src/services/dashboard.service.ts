@@ -1,32 +1,44 @@
-import { sueldoRepository } from '../repositories/sueldo.repository.js';
-import { servicioRepository } from '../repositories/servicio.repository.js';
 import { metaRepository } from '../repositories/meta.repository.js';
 import { gastoRepository } from '../repositories/gasto.repository.js';
 import { comidaRepository } from '../repositories/comida.repository.js';
 import { gimnasioRepository } from '../repositories/gimnasio.repository.js';
 import { ahorroRepository } from '../repositories/ahorro.repository.js';
+import { cuentaRepository } from '../repositories/cuenta.repository.js';
+import { registroModuloPersonalizadoRepository } from '../repositories/registro-modulo-personalizado.repository.js';
+import { getAlcanceModulosUseCase } from './modulo.service.js';
+import { listCuentasUseCase } from './cuenta.service.js';
 
 export async function getDashboardUseCase(usuarioId: string) {
-  const [sueldo, servicios, metas, gastos, comidas, gimnasio, ahorros] = await Promise.all([
-    sueldoRepository.findByUsuario(usuarioId),
-    servicioRepository.findByUsuario(usuarioId),
-    metaRepository.findByUsuario(usuarioId),
-    gastoRepository.findByUsuario(usuarioId),
-    comidaRepository.findByUsuario(usuarioId),
-    gimnasioRepository.findByUsuario(usuarioId),
-    ahorroRepository.findByUsuario(usuarioId),
-  ]);
+  const [cuentasTodas, metasTodas, gastosTodos, comidasTodas, gimnasioTodo, ahorrosTodos, cuentas, alcance] =
+    await Promise.all([
+      cuentaRepository.findByUsuario(usuarioId),
+      metaRepository.findByUsuario(usuarioId),
+      gastoRepository.findByUsuario(usuarioId),
+      comidaRepository.findByUsuario(usuarioId),
+      gimnasioRepository.findByUsuario(usuarioId),
+      ahorroRepository.findByUsuario(usuarioId),
+      listCuentasUseCase(usuarioId),
+      getAlcanceModulosUseCase(usuarioId),
+    ]);
 
-  const sueldoMonto = sueldo?.monto.toNumber() ?? 0;
+  const metas = alcance.metas ? metasTodas : [];
+  const gastos = alcance.gastos ? gastosTodos : [];
+  const comidas = alcance.comida ? comidasTodas : [];
+  const gimnasio = alcance.gimnasio ? gimnasioTodo : [];
+  const ahorros = alcance.ahorros ? ahorrosTodos : [];
 
-  const totalServicios = servicios.reduce((acc, s) => acc + s.montoDestinado.toNumber(), 0);
+  const sueldoMonto = cuentasTodas.reduce((acc, c) => acc + c.saldoInicial.toNumber(), 0);
+
   const totalMetas = metas.reduce((acc, m) => acc + m.montoMensual.toNumber(), 0);
   const totalGastos = gastos.reduce((acc, g) => acc + g.monto.toNumber(), 0);
   const totalComidas = comidas.reduce((acc, c) => acc + c.monto.toNumber(), 0);
   const totalGimnasio = gimnasio.reduce((acc, r) => acc + r.monto.toNumber(), 0);
   const totalAhorros = ahorros.reduce((acc, a) => acc + a.actual.toNumber(), 0);
 
-  const gastosTotales = totalServicios + totalGastos + totalComidas + totalGimnasio;
+  const registrosPersonalizados = await registroModuloPersonalizadoRepository.findActivosByUsuario(usuarioId);
+  const totalPersonalizados = registrosPersonalizados.reduce((acc, r) => acc + r.monto.toNumber(), 0);
+
+  const gastosTotales = totalGastos + totalComidas + totalGimnasio + totalPersonalizados;
   const ahorrosTotales = totalMetas + totalAhorros;
 
   return {
@@ -35,7 +47,13 @@ export async function getDashboardUseCase(usuarioId: string) {
     gastos: gastosTotales,
     ahorros: ahorrosTotales,
     saldoDisponible: sueldoMonto - gastosTotales - ahorrosTotales,
-    totalServicios: servicios.length,
     totalMetas: metas.length,
+    cuentas: cuentas.map((c) => ({
+      id: c.id,
+      nombre: c.nombre,
+      tipo: c.tipo,
+      saldoInicial: c.saldoInicial,
+      balance: c.balance,
+    })),
   };
 }

@@ -28,6 +28,29 @@ export async function createCategoriaUseCase(usuarioId: string, data: CreateCate
   return toDTO(categoria);
 }
 
+export async function renameCategoriaUseCase(usuarioId: string, id: string, nombre: string) {
+  const categoria = await categoriaRepository.findById(id);
+  if (!categoria || categoria.usuarioId !== usuarioId) {
+    throw new HttpError(404, 'Categoría no encontrada');
+  }
+
+  const existentes = await categoriaRepository.findByUsuario(usuarioId);
+  const duplicada = existentes.some(
+    (c) => c.id !== id && c.nombre.toLowerCase() === nombre.toLowerCase(),
+  );
+  if (duplicada) {
+    throw new HttpError(409, 'Ya tenés una categoría con ese nombre');
+  }
+
+  const [actualizada] = await categoriaRepository.renameWithReferences(
+    usuarioId,
+    id,
+    categoria.nombre,
+    nombre,
+  );
+  return toDTO(actualizada);
+}
+
 export async function deleteCategoriaUseCase(usuarioId: string, id: string) {
   const categoria = await categoriaRepository.findById(id);
   if (!categoria || categoria.usuarioId !== usuarioId) {

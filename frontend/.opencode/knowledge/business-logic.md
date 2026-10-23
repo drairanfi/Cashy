@@ -279,3 +279,10 @@ Grep: pattern="## Data Visibility Rules", path="business-rules.md", -A=40
 ---
 
 **Token Budget**: 500-2000 tokens. Full details in PROJECT.md/PRD.md.
+
+## Terminología: categoría vs módulo
+
+- Cuando un usuario crea una **nueva categoría** desde la pantalla de categorías, lo que se crea es un **módulo nuevo**, no una categoría de gasto.
+- Un módulo nuevo es una lista genérica de registros (descripción, monto, fecha) que se puede ocultar del menú (sin borrar datos) o eliminar junto con sus datos.
+- Los módulos ocultos no suman en el dashboard, movimientos recientes, registro rápido ni asistente IA.
+

@@ -13,10 +13,17 @@ interface GastosSectionProps {
   gastos: Gasto[];
   isLoading: boolean;
   onCreate: () => void;
+  onEdit: (gasto: Gasto) => void;
   onDelete: (gasto: Gasto) => void;
 }
 
-export function GastosSection({ gastos, isLoading, onCreate, onDelete }: GastosSectionProps) {
+export function GastosSection({
+  gastos,
+  isLoading,
+  onCreate,
+  onEdit,
+  onDelete
+}: GastosSectionProps) {
   const total = gastos.reduce((acc, gasto) => acc + gasto.monto, 0);
 
   return (
@@ -47,7 +54,7 @@ export function GastosSection({ gastos, isLoading, onCreate, onDelete }: GastosS
       ) : (
         <div className="flex flex-col gap-2">
           {gastos.map(gasto => (
-            <GastoCard key={gasto.id} gasto={gasto} onDelete={onDelete} />
+            <GastoCard key={gasto.id} gasto={gasto} onEdit={onEdit} onDelete={onDelete} />
           ))}
         </div>
       )}

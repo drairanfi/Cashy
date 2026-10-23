@@ -30,9 +30,9 @@ export function CuentasSection({
     <section className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold text-foreground">
+          <h2 className="text-xl font-extrabold text-foreground">
             {cuentasMessages.sectionTitle}
-          </h1>
+          </h2>
           <p className="text-sm text-muted-foreground">
             {cuentasMessages.totalLabel(formatCurrency(totalBalance))}
           </p>

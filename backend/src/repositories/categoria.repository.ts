@@ -9,5 +9,15 @@ export const categoriaRepository = {
 
   findById: (id: string) => prisma.categoria.findUnique({ where: { id } }),
 
+  renameWithReferences: (usuarioId: string, id: string, from: string, to: string) =>
+    prisma.$transaction([
+      prisma.categoria.update({ where: { id }, data: { nombre: to } }),
+      prisma.gasto.updateMany({ where: { usuarioId, categoria: from }, data: { categoria: to } }),
+      prisma.reglaRecurrente.updateMany({
+        where: { usuarioId, categoria: from },
+        data: { categoria: to },
+      }),
+    ]),
+
   remove: (id: string) => prisma.categoria.delete({ where: { id } }),
 };

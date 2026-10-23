@@ -3,40 +3,30 @@
 import { useState } from 'react';
 
 import { Skeleton } from '@/components/atoms/skeleton';
-import { Button } from '@/components/ui/button';
 import { InsightsPanel } from '@/domains/ai/components/organisms/insights-panel';
 import { useInsights } from '@/domains/ai/hooks/use-insights';
 import { DashboardHeader } from '@/domains/dashboard/components/organisms/dashboard-header';
-import { QuickRegister } from '@/domains/dashboard/components/organisms/quick-register';
 import { RecentMovements } from '@/domains/dashboard/components/organisms/recent-movements';
 import { useDashboard } from '@/domains/dashboard/hooks/use-dashboard';
 import { MetaModal } from '@/domains/metas/components/organisms/meta-modal';
 import { MetasSection } from '@/domains/metas/components/organisms/metas-section';
 import { useMetas } from '@/domains/metas/hooks/use-metas';
-import { ServicioModal } from '@/domains/servicios/components/organisms/servicio-modal';
-import { ServiciosSection } from '@/domains/servicios/components/organisms/servicios-section';
-import { useServicios } from '@/domains/servicios/hooks/use-servicios';
-import { SueldoPrompt } from '@/domains/sueldo/components/molecules/sueldo-prompt';
-import { SueldoModal } from '@/domains/sueldo/components/organisms/sueldo-modal';
-import { sueldoMessages } from '@/domains/sueldo/messages';
+import { useModulos } from '@/domains/modulos/hooks/use-modulos';
 import { useSessionStore } from '@/store/session.store';
 import type { Meta } from '@/types/meta.types';
-import type { Servicio } from '@/types/servicio.types';
 
 export default function DashboardPage() {
   const user = useSessionStore(state => state.user);
   const { data: summary, isLoading } = useDashboard();
-  const { data: servicios = [] } = useServicios();
   const { data: metas = [] } = useMetas();
   const { data: insights } = useInsights();
+  const { data: modulos = [] } = useModulos();
+  const isMetasActivo = modulos.some(modulo => modulo.clave === 'metas' && modulo.activo);
 
-  const [isSueldoModalOpen, setIsSueldoModalOpen] = useState(false);
   const [isMetaModalOpen, setIsMetaModalOpen] = useState(false);
-  const [isServicioModalOpen, setIsServicioModalOpen] = useState(false);
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
   const [hasSeenInsights, setHasSeenInsights] = useState(false);
   const [editingMeta, setEditingMeta] = useState<Meta | null>(null);
-  const [editingServicio, setEditingServicio] = useState<Servicio | null>(null);
 
   if (isLoading || !summary) {
     return (
@@ -71,6 +61,7 @@ export default function DashboardPage() {
         ingresos={summary.ingresos}
         gastos={summary.gastos}
         ahorros={summary.ahorros}
+        cuentas={summary.cuentas}
         hasNotifications={!hasSeenInsights && (insights?.insights.length ?? 0) > 0}
         onOpenNotifications={() => {
           setHasSeenInsights(true);
@@ -78,21 +69,9 @@ export default function DashboardPage() {
         }}
       />
 
-      {summary.sueldo === 0 ? (
-        <SueldoPrompt onConfigure={() => setIsSueldoModalOpen(true)} />
-      ) : (
-        <div className="flex justify-end">
-          <Button variant="ghost" size="sm" onClick={() => setIsSueldoModalOpen(true)}>
-            {sueldoMessages.editAction}
-          </Button>
-        </div>
-      )}
-
-      <QuickRegister />
-
       <RecentMovements />
 
-      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+      {isMetasActivo && (
         <MetasSection
           metas={metas}
           onCreate={() => {
@@ -104,33 +83,12 @@ export default function DashboardPage() {
             setIsMetaModalOpen(true);
           }}
         />
-        <ServiciosSection
-          servicios={servicios}
-          onCreate={() => {
-            setEditingServicio(null);
-            setIsServicioModalOpen(true);
-          }}
-          onEdit={servicio => {
-            setEditingServicio(servicio);
-            setIsServicioModalOpen(true);
-          }}
-        />
-      </div>
+      )}
 
-      <SueldoModal
-        open={isSueldoModalOpen}
-        onClose={() => setIsSueldoModalOpen(false)}
-        currentAmount={summary.sueldo}
-      />
       <MetaModal
         open={isMetaModalOpen}
         onClose={() => setIsMetaModalOpen(false)}
         meta={editingMeta}
-      />
-      <ServicioModal
-        open={isServicioModalOpen}
-        onClose={() => setIsServicioModalOpen(false)}
-        servicio={editingServicio}
       />
 
       <InsightsPanel open={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />

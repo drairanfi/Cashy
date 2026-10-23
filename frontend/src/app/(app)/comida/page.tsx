@@ -1,5 +1,7 @@
 'use client';
 
+import { ModuloVisibilidadToggle } from '@/domains/modulos/components/organisms/modulo-visibilidad-toggle';
+
 import { useState } from 'react';
 
 import { ConfirmDialog } from '@/components/molecules/confirm-dialog';
@@ -23,6 +25,9 @@ export default function FoodPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <ModuloVisibilidadToggle clave="comida" />
+      </div>
       <ComidasSection
         comidas={comidas}
         isLoading={isLoading}

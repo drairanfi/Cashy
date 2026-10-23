@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import {
   listGastosUseCase,
   createGastoUseCase,
+  updateGastoUseCase,
   deleteGastoUseCase,
 } from '../services/gasto.service.js';
 
@@ -18,6 +19,15 @@ export async function createGasto(req: Request, res: Response, next: NextFunctio
   try {
     const gasto = await createGastoUseCase(req.user.id, req.body);
     res.status(201).json(gasto);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateGasto(req: Request, res: Response, next: NextFunction) {
+  try {
+    const gasto = await updateGastoUseCase(req.user.id, req.params.id, req.body);
+    res.json(gasto);
   } catch (err) {
     next(err);
   }

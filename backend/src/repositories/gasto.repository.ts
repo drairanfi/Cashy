@@ -11,5 +11,10 @@ export const gastoRepository = {
 
   findById: (id: string) => prisma.gasto.findUnique({ where: { id } }),
 
+  update: (
+    id: string,
+    data: { descripcion?: string; monto?: number; categoria?: string; cuentaId?: string | null },
+  ) => prisma.gasto.update({ where: { id }, data }),
+
   remove: (id: string) => prisma.gasto.delete({ where: { id } }),
 };

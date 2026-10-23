@@ -1,9 +1,19 @@
 import { prisma } from '../config/prisma.js';
 
+interface MetaFechas {
+  fechaInicio?: Date;
+  fechaFin?: Date | null;
+}
+
 export const metaRepository = {
   create: (
     usuarioId: string,
-    data: { nombre: string; montoObjetivo: number; montoMensual: number; prioritaria?: boolean },
+    data: {
+      nombre: string;
+      montoObjetivo: number;
+      montoMensual: number;
+      prioritaria?: boolean;
+    } & MetaFechas,
   ) => prisma.meta.create({ data: { usuarioId, prioritaria: false, ...data } }),
 
   findByUsuario: (usuarioId: string) =>
@@ -21,7 +31,7 @@ export const metaRepository = {
       montoObjetivo?: number;
       montoMensual?: number;
       prioritaria?: boolean;
-    },
+    } & MetaFechas,
   ) => prisma.meta.update({ where: { id }, data }),
 
   remove: (id: string) => prisma.meta.delete({ where: { id } }),

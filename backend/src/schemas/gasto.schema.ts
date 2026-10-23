@@ -10,3 +10,7 @@ export const createGastoSchema = z.object({
 });
 
 export type CreateGastoInput = z.infer<typeof createGastoSchema>;
+
+export const updateGastoSchema = createGastoSchema.partial();
+
+export type UpdateGastoInput = z.infer<typeof updateGastoSchema>;

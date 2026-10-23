@@ -23,6 +23,17 @@ interface MetaModalProps {
   meta: Meta | null;
 }
 
+function toDateInput(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getDefaultValues(): Partial<MetaInput> {
+  return { prioritaria: false, fechaInicio: toDateInput(new Date()), fechaFin: '' };
+}
+
 export function MetaModal({ open, onClose, meta }: MetaModalProps) {
   const isEdit = meta !== null;
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -37,7 +48,7 @@ export function MetaModal({ open, onClose, meta }: MetaModalProps) {
     formState: { errors }
   } = useForm<MetaInput>({
     resolver: zodResolver(metaSchema),
-    defaultValues: { prioritaria: false }
+    defaultValues: getDefaultValues()
   });
 
   useEffect(() => {
@@ -48,18 +59,21 @@ export function MetaModal({ open, onClose, meta }: MetaModalProps) {
             nombre: meta.nombre,
             montoObjetivo: meta.montoObjetivo,
             montoMensual: meta.montoMensual,
-            prioritaria: meta.prioritaria
+            prioritaria: meta.prioritaria,
+            fechaInicio: meta.fechaInicio.slice(0, 10),
+            fechaFin: meta.fechaFin ? meta.fechaFin.slice(0, 10) : ''
           }
-        : { prioritaria: false }
+        : getDefaultValues()
     );
   }, [open, meta, reset]);
 
   const onSubmit = handleSubmit(async values => {
+    const payload = { ...values, fechaFin: values.fechaFin || null };
     try {
       if (isEdit && meta) {
-        await updateMeta.mutateAsync({ id: meta.id, data: values });
+        await updateMeta.mutateAsync({ id: meta.id, data: payload });
       } else {
-        await createMeta.mutateAsync(values);
+        await createMeta.mutateAsync(payload);
       }
       reset();
       onClose();
@@ -120,6 +134,19 @@ export function MetaModal({ open, onClose, meta }: MetaModalProps) {
               aria-invalid={Boolean(errors.montoMensual)}
               {...register('montoMensual', { valueAsNumber: true })}
             />
+          </FormField>
+          <FormField
+            label={metasMessages.modal.startDateLabel}
+            error={errors.fechaInicio?.message}
+          >
+            <Input
+              type="date"
+              aria-invalid={Boolean(errors.fechaInicio)}
+              {...register('fechaInicio')}
+            />
+          </FormField>
+          <FormField label={metasMessages.modal.endDateLabel} error={errors.fechaFin?.message}>
+            <Input type="date" aria-invalid={Boolean(errors.fechaFin)} {...register('fechaFin')} />
           </FormField>
           <label className="flex items-start gap-2 rounded-xl border border-border p-3">
             <input type="checkbox" className="mt-0.5 size-4" {...register('prioritaria')} />

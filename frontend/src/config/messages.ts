@@ -19,8 +19,10 @@ export const commonMessages = {
     recurring: 'Recurrentes',
     accounts: 'Cuentas',
     debts: 'Deudas',
-    categories: 'Categorías',
-    more: 'Más'
+    goals: 'Metas de ahorro',
+    settings: 'Configuración',
+    more: 'Más',
+    profile: 'Perfil'
   },
   states: {
     loading: 'Cargando...',

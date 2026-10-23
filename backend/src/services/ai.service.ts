@@ -4,14 +4,14 @@ import { HttpError } from '../utils/httpError.js';
 import { formatMoney } from '../utils/money.js';
 import { GASTO_CATEGORIAS } from '../schemas/gasto.schema.js';
 import { userRepository } from '../repositories/user.repository.js';
-import { sueldoRepository } from '../repositories/sueldo.repository.js';
-import { servicioRepository } from '../repositories/servicio.repository.js';
+import { cuentaRepository } from '../repositories/cuenta.repository.js';
 import { metaRepository } from '../repositories/meta.repository.js';
 import { gastoRepository } from '../repositories/gasto.repository.js';
 import { comidaRepository } from '../repositories/comida.repository.js';
 import { gimnasioRepository } from '../repositories/gimnasio.repository.js';
 import { ahorroRepository } from '../repositories/ahorro.repository.js';
 import { categoriaRepository } from '../repositories/categoria.repository.js';
+import { getAlcanceModulosUseCase } from './modulo.service.js';
 import { insightsModelSchema, type ChatInput, type Insight } from '../schemas/ai.schema.js';
 import {
   buildToolDefinitions,
@@ -142,18 +142,33 @@ async function callModel(
 }
 
 async function buildFinancialContext(usuarioId: string): Promise<string> {
-  const [usuario, sueldo, servicios, metas, gastos, comidas, gimnasio, ahorros, categorias] =
-    await Promise.all([
-      userRepository.findById(usuarioId),
-      sueldoRepository.findByUsuario(usuarioId),
-      servicioRepository.findByUsuario(usuarioId),
-      metaRepository.findByUsuario(usuarioId),
-      gastoRepository.findByUsuario(usuarioId),
-      comidaRepository.findByUsuario(usuarioId),
-      gimnasioRepository.findByUsuario(usuarioId),
-      ahorroRepository.findByUsuario(usuarioId),
-      categoriaRepository.findByUsuario(usuarioId),
-    ]);
+  const [
+    usuario,
+    cuentasDinero,
+    metasTodas,
+    gastosTodos,
+    comidasTodas,
+    gimnasioTodo,
+    ahorrosTodos,
+    categorias,
+    alcance,
+  ] = await Promise.all([
+    userRepository.findById(usuarioId),
+    cuentaRepository.findByUsuario(usuarioId),
+    metaRepository.findByUsuario(usuarioId),
+    gastoRepository.findByUsuario(usuarioId),
+    comidaRepository.findByUsuario(usuarioId),
+    gimnasioRepository.findByUsuario(usuarioId),
+    ahorroRepository.findByUsuario(usuarioId),
+    categoriaRepository.findByUsuario(usuarioId),
+    getAlcanceModulosUseCase(usuarioId),
+  ]);
+
+  const metas = alcance.metas ? metasTodas : [];
+  const gastos = alcance.gastos ? gastosTodos : [];
+  const comidas = alcance.comida ? comidasTodas : [];
+  const gimnasio = alcance.gimnasio ? gimnasioTodo : [];
+  const ahorros = alcance.ahorros ? ahorrosTodos : [];
 
   const hoy = new Date();
   const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
@@ -161,8 +176,7 @@ async function buildFinancialContext(usuarioId: string): Promise<string> {
   const diaActual = hoy.getDate();
   const diasRestantes = Math.max(diasDelMes - diaActual + 1, 0);
 
-  const sueldoMonto = sueldo?.monto.toNumber() ?? 0;
-  const totalServicios = servicios.reduce((acc, s) => acc + s.montoDestinado.toNumber(), 0);
+  const sueldoMonto = cuentasDinero.reduce((acc, c) => acc + c.saldoInicial.toNumber(), 0);
   const totalMetas = metas.reduce((acc, m) => acc + m.montoMensual.toNumber(), 0);
   const totalAhorros = ahorros.reduce((acc, a) => acc + a.actual.toNumber(), 0);
 
@@ -175,7 +189,7 @@ async function buildFinancialContext(usuarioId: string): Promise<string> {
   const totalGimnasioMes = gimnasioMes.reduce((acc, r) => acc + r.monto.toNumber(), 0);
   const variablesMes = totalGastosMes + totalComidasMes + totalGimnasioMes;
 
-  const gastosTotales = totalServicios + variablesMes;
+  const gastosTotales = variablesMes;
   const ahorrosTotales = totalMetas + totalAhorros;
   const saldoTrasVariables = sueldoMonto - gastosTotales - ahorrosTotales;
   const porDia = diasRestantes > 0 ? saldoTrasVariables / diasRestantes : saldoTrasVariables;
@@ -202,20 +216,12 @@ async function buildFinancialContext(usuarioId: string): Promise<string> {
     'INGRESOS',
     `Sueldo mensual: ${formatMoney(sueldoMonto)}.`,
     '',
-    'GASTOS FIJOS COMPROMETIDOS',
-    `Servicios y obligaciones: ${formatMoney(totalServicios)}.`,
-    servicios.length
-      ? `Detalle servicios: ${servicios
-          .map((s) => `${s.nombre} (${formatMoney(s.montoDestinado.toNumber())})`)
-          .join(', ')}.`
-      : 'No tiene servicios cargados.',
-    '',
     'GASTOS VARIABLES DE ESTE MES',
     `Gastos: total ${formatMoney(totalGastosMes)} en ${gastosMes.length} movimientos. ${detalleGastos ? `Detalle: ${detalleGastos}.` : ''}`,
     `Comida: total ${formatMoney(totalComidasMes)} en ${comidasMes.length} movimientos. ${detalleComidas ? `Detalle: ${detalleComidas}.` : ''}`,
     `Gimnasio: total ${formatMoney(totalGimnasioMes)} en ${gimnasioMes.length} movimientos. ${detalleGimnasio ? `Detalle: ${detalleGimnasio}.` : ''}`,
     `Total de gastos variables de este mes: ${formatMoney(variablesMes)}.`,
-    `Gasto total del mes (servicios + variables): ${formatMoney(gastosTotales)}.`,
+    `Gasto total del mes: ${formatMoney(gastosTotales)}.`,
     '',
     'AHORROS',
     `Aporte mensual comprometido en metas: ${formatMoney(totalMetas)}.`,
@@ -238,7 +244,7 @@ async function buildFinancialContext(usuarioId: string): Promise<string> {
       : 'No tiene ahorros en curso.',
     '',
     'RESULTADO',
-    `Gastos totales (servicios + gastos + comida + gimnasio): ${formatMoney(gastosTotales)}.`,
+    `Gastos totales (gastos + comida + gimnasio): ${formatMoney(gastosTotales)}.`,
     `Ahorros totales (aporte mensual de metas + dinero ya ahorrado): ${formatMoney(ahorrosTotales)}.`,
     `Saldo disponible = sueldo - gastos totales - ahorros totales = ${formatMoney(saldoTrasVariables)}.`,
     'Usá SIEMPRE este saldo disponible como referencia principal; es el mismo número que muestra el Dashboard.',
@@ -257,7 +263,7 @@ Recibís el contexto financiero actual del usuario y tenés que devolver SOLO un
 
 Reglas:
 - Entre 2 y 5 insights.
-- Tenés acceso a sueldo, servicios, metas, gastos variables, comida, gimnasio y ahorros; usá el detalle del mes actual.
+- Tenés acceso a sueldo, metas, gastos variables, comida, gimnasio y ahorros; usá el detalle del mes actual.
 - Los montos están en pesos colombianos (COP), nunca en dólares.
 - Algunas metas pueden estar marcadas como "META GRANDE (prioritaria)" (una casa, un auto, una moto, un viaje importante). Son el objetivo de ahorro más importante del usuario: dalas prioridad en tus consejos y mencionalas por su nombre.
 - Cuando hables del saldo disponible, usá exactamente el que figura en 'RESULTADO' (sueldo menos gastos totales menos ahorros totales), que es el mismo que muestra el Dashboard. No calcules el saldo restando solo algunos conceptos.
@@ -271,7 +277,7 @@ Reglas:
 const SYSTEM_CHAT = `Sos Cashy, el asistente financiero personal del usuario. Respondés en español neutro, cercano y claro (tuteo: "puedes", "tienes", "fíjate"), en texto plano, sin markdown.
 
 Reglas:
-- Tenés acceso a TODOS los datos del usuario: sueldo, servicios, metas de ahorro, gastos variables, comida, gimnasio y ahorros. Usá el contexto completo, incluido el detalle del mes actual.
+- Tenés acceso a TODOS los datos del usuario: sueldo, metas de ahorro, gastos variables, comida, gimnasio y ahorros. Usá el contexto completo, incluido el detalle del mes actual.
 - Los montos están en pesos colombianos (COP), nunca en dólares. No uses la palabra "dólares".
 - Algunas metas pueden estar marcadas como "META GRANDE (prioritaria)" (una casa, un auto, una moto, un viaje importante). Esa es la meta de ahorro más importante del usuario: dalas prioridad, mencionálas por su nombre y orientá tus recomendaciones a acercarlo a esa meta.
 - Cuando hables del saldo disponible, usá exactamente el que figura en la línea 'Saldo disponible = ...' de la sección RESULTADO (sueldo menos gastos totales menos ahorros totales), que es el mismo número que muestra el Dashboard. No calcules el saldo restando solo algunos conceptos.

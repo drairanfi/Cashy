@@ -5,3 +5,7 @@ export const createCategoriaSchema = z.object({
 });
 
 export type CreateCategoriaInput = z.infer<typeof createCategoriaSchema>;
+
+export const updateCategoriaSchema = createCategoriaSchema;
+
+export type UpdateCategoriaInput = z.infer<typeof updateCategoriaSchema>;
